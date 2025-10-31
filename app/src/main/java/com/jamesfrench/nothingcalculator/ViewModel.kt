@@ -1,4 +1,4 @@
-package com.example.nothingcalculator
+package com.jamesfrench.nothingcalculator
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -99,25 +99,27 @@ class SharedViewModel : ViewModel() {
     fun cleanExpression(expression: String): String {
         var cleaned = expression
 
-        // Remove "-" if useless
-        if (cleaned.endsWith("–")) {
-            cleaned = cleaned.removeSuffix("–")
+        // Everywhere : Remove "(" or "–" if useless 2 times
+        repeat(2) {
+            if (cleaned.endsWith("(") || cleaned.endsWith("–")) {
+                cleaned = cleaned.dropLast(1)
+            }
         }
 
-        // Remove "(" if useless
-        if (cleaned.endsWith("(")) {
-            cleaned = cleaned.removeSuffix("(")
-        }
-
-        // Remove operator if useless
+        // Everywhere : Remove operator if useless
         if (cleaned.isNotEmpty() && isExpression(cleaned.last().toString())) {
             cleaned = cleaned.removeSuffix(cleaned.last().toString())
         }
 
-        // Adds missing brackets if necessary
+        // Typing : Adds missing brackets if necessary
         val missingBrackets = cleaned.count { it == '(' } - cleaned.count { it == ')' }
         if (missingBrackets > 0) {
             cleaned += ")".repeat(missingBrackets)
+        }
+
+        // Typing : Edge case where the user just input ","
+        if (cleaned == ",") {
+            cleaned = "${cleaned}0"
         }
 
         // Replacement of operators
@@ -145,7 +147,8 @@ class SharedViewModel : ViewModel() {
                     .replace("E", "e")
                     .removeSuffix(",0")
 
-                if (resultOfCalculation != cleanedExpression) {
+                println(cleanedExpression)
+                if (cleanExpression(resultOfCalculation.toString()) != cleanedExpression) {
                     result = resultOfCalculation
                 } else { result = "" }
             } else { result = "" }

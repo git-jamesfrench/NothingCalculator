@@ -1,4 +1,4 @@
-package com.example.nothingcalculator
+package com.jamesfrench.nothingcalculator
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseIn
@@ -31,35 +31,37 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nothingcalculator.ui.theme.ContrastedGray
-import com.example.nothingcalculator.ui.theme.DeepBlack
-import com.example.nothingcalculator.ui.theme.DeepWhite
-import com.example.nothingcalculator.ui.theme.NothingRed
-import com.example.nothingcalculator.ui.theme.SqueezedContrastedGray
-import com.example.nothingcalculator.ui.theme.SqueezedDeepWhite
-import com.example.nothingcalculator.ui.theme.SqueezedNothingRed
-import com.example.nothingcalculator.ui.theme.ndot77
-import com.example.nothingcalculator.ui.theme.notosans
+import com.jamesfrench.nothingcalculator.ui.theme.ContrastedGray
+import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
+import com.jamesfrench.nothingcalculator.ui.theme.DeepWhite
+import com.jamesfrench.nothingcalculator.ui.theme.NothingRed
+import com.jamesfrench.nothingcalculator.ui.theme.SqueezedContrastedGray
+import com.jamesfrench.nothingcalculator.ui.theme.SqueezedDeepWhite
+import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNothingRed
+import com.jamesfrench.nothingcalculator.ui.theme.ndot77
+import com.jamesfrench.nothingcalculator.ui.theme.notosans
 
-data class KeysValue(val symbol: String, val background: Color, val font: FontFamily, val weight: Float)
+data class KeysValue(val symbol: Any, val background: Color, val font: FontFamily, val weight: Float, val value: Any = symbol)
 
 private val KeysValues = listOf(
     listOf(
         KeysValue("(", NothingRed, ndot77, 1f),
         KeysValue("%", NothingRed, ndot77, 1f),
-        KeysValue("÷", NothingRed, ndot77, 1f),
-        KeysValue("×", NothingRed, ndot77, 1f)
+        KeysValue("÷", NothingRed, ndot77, 1f, "/"),
+        KeysValue("×", NothingRed, ndot77, 1f, "*")
     ),
     listOf(
         KeysValue("7", ContrastedGray, notosans, 1f),
         KeysValue("8", ContrastedGray, notosans, 1f),
         KeysValue("9", ContrastedGray, notosans, 1f),
-        KeysValue("–", NothingRed, ndot77, 1f)
+        KeysValue("–", NothingRed, ndot77, 1f, "-")
     ),
     listOf(
         KeysValue("4", ContrastedGray, notosans, 1f),
@@ -71,7 +73,7 @@ private val KeysValues = listOf(
         KeysValue("1", ContrastedGray, notosans, 1f),
         KeysValue("2", ContrastedGray, notosans, 1f),
         KeysValue("3", ContrastedGray, notosans, 1f),
-        KeysValue(",", NothingRed, ndot77, 1f)
+        KeysValue(R.string.decimal, NothingRed, ndot77, 1f, ".")
     ),
     listOf(
         KeysValue("0", ContrastedGray, notosans, 2f),
@@ -187,7 +189,7 @@ fun KeysRows(viewModel: SharedViewModel, number: Int) {
         for (key in KeysValues[number]) {
             Key(
                 viewModel,
-                key.symbol,
+                key.symbol as? String ?: stringResource(key.symbol as Int),
                 key.background,
                 if (key.background == DeepWhite) DeepBlack else DeepWhite,
                 key.font,

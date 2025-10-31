@@ -1,4 +1,4 @@
-package com.example.nothingcalculator
+package com.jamesfrench.nothingcalculator
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.nothingcalculator.ui.theme.NothingCalculatorTheme
+import com.jamesfrench.nothingcalculator.ui.theme.NothingCalculatorTheme
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Fixed portrait orientation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
         setContent {
             NothingCalculatorTheme {
@@ -47,7 +47,8 @@ fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewMo
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.weight(1f))
+            TopNavigation()
+            Spacer(modifier = Modifier.weight(0.8f))
             Calculations(sharedViewModel)
             Spacer(modifier = Modifier.weight(0.3f))
             Result(sharedViewModel)

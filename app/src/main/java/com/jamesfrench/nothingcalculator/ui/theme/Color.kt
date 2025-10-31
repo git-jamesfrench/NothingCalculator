@@ -1,4 +1,4 @@
-package com.example.nothingcalculator.ui.theme
+package com.jamesfrench.nothingcalculator.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

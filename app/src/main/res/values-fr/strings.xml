@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Calculatrice</string>
+    <string name="decimal">,</string>
+    <string name="settings">Paramètres</string>
+    <string name="source_code_github">Code Source sur Github</string>
+    <string name="menu">Menu</string>
+    <string name="history">Historique</string>
+    <string name="clipdata_result">Résultat</string>
+</resources>

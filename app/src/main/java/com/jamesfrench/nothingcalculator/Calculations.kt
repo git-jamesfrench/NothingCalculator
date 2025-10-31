@@ -1,4 +1,4 @@
-package com.example.nothingcalculator
+package com.jamesfrench.nothingcalculator
 
 import android.content.ClipData
 import androidx.compose.animation.animateColorAsState
@@ -36,6 +36,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -46,12 +47,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nothingcalculator.ui.theme.ContrastedGray
-import com.example.nothingcalculator.ui.theme.DeepBlack
-import com.example.nothingcalculator.ui.theme.DeepWhite
-import com.example.nothingcalculator.ui.theme.NothingRed
-import com.example.nothingcalculator.ui.theme.ndot77
-import com.example.nothingcalculator.ui.theme.notosans
+import com.jamesfrench.nothingcalculator.ui.theme.ContrastedGray
+import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
+import com.jamesfrench.nothingcalculator.ui.theme.DeepWhite
+import com.jamesfrench.nothingcalculator.ui.theme.NothingRed
+import com.jamesfrench.nothingcalculator.ui.theme.ndot77
+import com.jamesfrench.nothingcalculator.ui.theme.notosans
 import kotlinx.coroutines.awaitCancellation
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -132,6 +133,7 @@ fun Result(viewModel: SharedViewModel) {
     val isPressed = interactionSource.collectIsPressedAsState().value
     val clipboard: Clipboard = LocalClipboard.current
     val textSize = if(viewModel.result.length < 16) 64.sp else 32.sp
+    val context = LocalContext.current
 
     val color by animateColorAsState(
         targetValue = if (isPressed) ContrastedGray else DeepBlack,
@@ -150,7 +152,7 @@ fun Result(viewModel: SharedViewModel) {
         lineHeight = textSize,
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
-            .defaultMinSize(minHeight = with(LocalDensity.current) {64.sp.toDp()})
+            .defaultMinSize(minHeight = with(LocalDensity.current) { 64.sp.toDp() })
             .fillMaxWidth()
             .drawBehind {
                 val strokeWidth = 15.dp.toPx()
@@ -172,7 +174,10 @@ fun Result(viewModel: SharedViewModel) {
                 onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
 
-                    val clip: ClipData = ClipData.newPlainText("Result", viewModel.result)
+                    val clip: ClipData = ClipData.newPlainText(
+                        context.getString(R.string.clipdata_result),
+                        viewModel.result
+                    )
                     clipboard.nativeClipboard.setPrimaryClip(clip)
                 }
             )
