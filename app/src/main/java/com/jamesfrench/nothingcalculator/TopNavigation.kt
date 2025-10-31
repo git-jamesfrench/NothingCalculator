@@ -74,7 +74,7 @@ fun TopNavigation() {
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
                 offset = DpOffset(0.dp, 6.dp),
-                shape = RoundedCornerShape(25.dp),
+                shape = RoundedCornerShape(19.dp),
                 containerColor = ContrastedGray,
             ) {
                 DropdownMenuItem(
@@ -85,14 +85,14 @@ fun TopNavigation() {
 
                     }
                 )
-                DropdownMenuItem(
-                    text = { Text(text = stringResource(R.string.source_code_github), style = normalText) },
-                    leadingIcon = { Icon(painterResource(R.drawable.github), contentDescription = stringResource(R.string.source_code_github)) },
-                    contentPadding = PaddingValues(start = 20.dp, end = 22.dp),
-                    onClick = {
-                        uriHandler.openUri("https://github.com/git-jamesfrench/NothingCalculator")
-                    }
-                )
+                //DropdownMenuItem(
+                //    text = { Text(text = stringResource(R.string.source_code_github), style = normalText) },
+                //    leadingIcon = { Icon(painterResource(R.drawable.github), contentDescription = stringResource(R.string.source_code_github)) },
+                //    contentPadding = PaddingValues(start = 20.dp, end = 22.dp),
+                //    onClick = {
+                //        uriHandler.openUri("https://github.com/git-jamesfrench/NothingCalculator")
+                //    }
+                //)
             }
         }
     }
