@@ -1,5 +1,6 @@
 package com.jamesfrench.nothingcalculator
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +9,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import net.objecthunter.exp4j.ExpressionBuilder
 
-class SharedViewModel : ViewModel() {
+class ResourceProvider(private val context: Context) {
+    fun getString(resId: Int): String {
+        return context.getString(resId)
+    }
+}
+
+class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
     var textState by mutableStateOf(TextFieldValue(""))
     var clearFocusRequest by mutableStateOf(false)
         private set
@@ -153,9 +160,9 @@ class SharedViewModel : ViewModel() {
                 } else { result = "" }
             } else { result = "" }
         } catch (e: ArithmeticException) {
-            result = "⚠ Division par zéro"
+            result = resourceProvider.getString(R.string.division_by_zero)
         } catch (e: IllegalArgumentException) {
-            result = "⚠ Format invalid"
+            result = resourceProvider.getString(R.string.invalid_format)
         } catch (e: Exception) {
             result = "⚠\n $e"
         }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rechner</string>
+    <string name="decimal">,</string>
+    <string name="settings">Einstellungen</string>
+    <string name="menu">Menü</string>
+    <string name="history">Geschichte</string>
+    <string name="clipdata_result">Ergebnis</string>
+    <string name="division_by_zero">⚠ Division durch Null</string>
+    <string name="invalid_format">⚠ Ungültiges Format</string>
+</resources>

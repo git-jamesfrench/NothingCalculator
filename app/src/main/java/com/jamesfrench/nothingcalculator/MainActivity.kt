@@ -1,6 +1,7 @@
 package com.jamesfrench.nothingcalculator
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.jamesfrench.nothingcalculator.ui.theme.NothingCalculatorTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +41,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewModel: SharedViewModel = SharedViewModel()) {
+fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewModel: SharedViewModel = SharedViewModel(ResourceProvider(
+    LocalContext.current
+))) {
     Box (modifier = modifier
         .fillMaxSize()
         .padding(innerPadding)
