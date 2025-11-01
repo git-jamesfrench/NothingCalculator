@@ -52,7 +52,7 @@ data class KeysValue(val symbol: Any, val background: Color, val font: FontFamil
 
 private val KeysValues = listOf(
     listOf(
-        KeysValue("(", NothingRed, ndot77, 1f),
+        KeysValue("(", NothingRed, ndot77, 1f, "("),
         KeysValue("%", NothingRed, ndot77, 1f),
         KeysValue("÷", NothingRed, ndot77, 1f, "/"),
         KeysValue("×", NothingRed, ndot77, 1f, "*")
@@ -94,7 +94,7 @@ fun squeezedColor(color: Color): Color {
 }
 
 @Composable
-fun Key(viewModel: SharedViewModel, text: String, background: Color, foreground: Color, font: FontFamily, modifier: Modifier = Modifier) {
+fun Key(viewModel: SharedViewModel, text: String, value: String, background: Color, foreground: Color, font: FontFamily, modifier: Modifier = Modifier) {
     val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState().value
@@ -138,7 +138,7 @@ fun Key(viewModel: SharedViewModel, text: String, background: Color, foreground:
                 role = null,
                 onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    viewModel.addText(character)
+                    viewModel.keyPressed(value)
                 }
             ),
     ) {
@@ -190,6 +190,7 @@ fun KeysRows(viewModel: SharedViewModel, number: Int) {
             Key(
                 viewModel,
                 key.symbol as? String ?: stringResource(key.symbol as Int),
+                key.value as String,
                 key.background,
                 if (key.background == DeepWhite) DeepBlack else DeepWhite,
                 key.font,

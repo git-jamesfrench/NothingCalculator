@@ -22,7 +22,7 @@ class SharedViewModel : ViewModel() {
     var closingBrackets by mutableStateOf(false)
         private set
 
-    fun addText(addition: String) {
+    fun keyPressed(addition: String) {
         val start = if (textState.selection.start < textState.selection.end) textState.selection.start else textState.selection.end
         val end = if (textState.selection.start < textState.selection.end) textState.selection.end else textState.selection.start
 
