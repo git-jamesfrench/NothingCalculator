@@ -15,6 +15,8 @@ class ResourceProvider(private val context: Context) {
     }
 }
 
+val expressions = listOf<Char>('*', '/', '-', '+')
+
 class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
     var textState by mutableStateOf(TextFieldValue(""))
     var clearFocusRequest by mutableStateOf(false)
@@ -67,20 +69,21 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             }
 
             // Replacement if last character is an operator (except minus)
-            if ( !(isExpression(addition) && textState.text.isEmpty()) ) {
-                if (isExpression(addition) && isExpression(textState.text[start - 1].toString()) && addition != "–") {
-                    textResult = textResult.replace(start - 1, start, addition)
-                    spaceAdded = 0
-                } else {
-                    textResult = textResult.insert(start, addition)
-                }
-            }
+            //if ( !(isExpression(addition) && textState.text.isEmpty()) ) {
+            //    if (isExpression(addition) && isExpression(textState.text[start - 1].toString()) && addition != "–") {
+            //        textResult = textResult.replace(start - 1, start, addition)
+            //        spaceAdded = 0
+            //    } else {
+            //        textResult = textResult.insert(start, addition)
+            //    }
+            //}
 
             // Adds "0" if possible
-            if (addition == "," && (start == 0 || isExpression(textState.text[start - 1].toString()))) {
-                textResult = textResult.insert(start, "0")
-                spaceAdded = 2
-            }
+            //if (addition == "," && (start == 0 || isExpression(textState.text[start - 1].toString()))) {
+            //    textResult = textResult.insert(start, "0")
+            //    spaceAdded = 2
+            //}
+            textResult = textResult.insert(start, addition)
 
             textState = textState.copy(
                 text = textResult.toString(),
@@ -91,9 +94,9 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         checkSelection()
 
         // Hide cursor if useless
-        if (textState.selection.length == 0 && textState.text.length == textState.selection.start) {
-            clearFocusRequest = true
-        }
+        //if (textState.selection.length == 0 && textState.text.length == textState.selection.start) {
+        //    clearFocusRequest = true
+        //}
 
         // Evaluate
         evaluateExpression()
@@ -104,42 +107,18 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
     }
 
     fun cleanExpression(expression: String): String {
-        var cleaned = expression
+        val cleaned = StringBuilder(expression)
 
-        // Everywhere : Remove "(" or "–" if useless 2 times
-        repeat(2) {
-            if (cleaned.endsWith("(") || cleaned.endsWith("–")) {
-                cleaned = cleaned.dropLast(1)
+        var i = 0
+        while (i != cleaned.length - 1) { // Stops before the last character
+            if (cleaned[i] in expressions && cleaned[i + 1] in expressions) {
+                cleaned.deleteAt(i)
+            } else {
+                i += 1
             }
         }
 
-        // Everywhere : Remove operator if useless
-        if (cleaned.isNotEmpty() && isExpression(cleaned.last().toString())) {
-            cleaned = cleaned.removeSuffix(cleaned.last().toString())
-        }
-
-        // Typing : Adds missing brackets if necessary
-        val missingBrackets = cleaned.count { it == '(' } - cleaned.count { it == ')' }
-        if (missingBrackets > 0) {
-            cleaned += ")".repeat(missingBrackets)
-        }
-
-        // Typing : Edge case where the user just input ","
-        if (cleaned == ",") {
-            cleaned = "${cleaned}0"
-        }
-
-        // Replacement of operators
-        if (cleaned.isNotEmpty()) {
-            cleaned = cleaned
-                .replace(",", ".")
-                .replace("×", "*")
-                .replace("÷", "/")
-                .replace("–", "-")
-                .replace("e", "E")
-        }
-
-        return cleaned
+        return cleaned.toString()
     }
 
     fun evaluateExpression() {
@@ -147,17 +126,14 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             val cleanedExpression = cleanExpression(textState.text)
 
             if (cleanedExpression.isNotEmpty()) {
-                val resultExpression = ExpressionBuilder(cleanedExpression).build().evaluate()
+                //val resultExpression = ExpressionBuilder(cleanedExpression).build().evaluate()
 
-                val resultOfCalculation = resultExpression.toString()
-                    .replace(".", ",")
-                    .replace("E", "e")
-                    .removeSuffix(",0")
+                //val resultOfCalculation = resultExpression.toString()
+                //    .removeSuffix(".0")
+                //    .replace(".", resourceProvider.getString(R.string.decimal))
+                //    .replace("E", "e")
 
-                println(cleanedExpression)
-                if (cleanExpression(resultOfCalculation.toString()) != cleanedExpression) {
-                    result = resultOfCalculation
-                } else { result = "" }
+                result = cleanedExpression
             } else { result = "" }
         } catch (e: ArithmeticException) {
             result = resourceProvider.getString(R.string.division_by_zero)
@@ -175,7 +151,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         closingBrackets = missingBrackets > 0 && !isExpression(textState.text[textState.selection.start - 1].toString())
     }
 
-    fun isExpression(char: String): Boolean {
-        return char in listOf<String>("×", "÷", "–", "+")
+    fun isExpression(char: Any): Boolean {
+        return char.toString() in listOf<String>("*", "/", "-", "+") //("×", "÷", "–", "+")
     }
 }
