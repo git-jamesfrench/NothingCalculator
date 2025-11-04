@@ -109,16 +109,25 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
     fun cleanExpression(expression: String): String {
         val cleaned = StringBuilder(expression)
 
-        var i = 0
-        while (i != cleaned.length - 1) { // Stops before the last character
-            if (cleaned[i] in expressions && cleaned[i + 1] in expressions) {
-                cleaned.deleteAt(i)
+        val operators = mutableMapOf<Int, String>()
+        var currentIndex = -1
+        for (i in cleaned.indices) {
+            if (cleaned[i] in expressions) {
+                if (currentIndex == -1) {
+                    currentIndex = i
+                    operators.put(currentIndex, "")
+                }
+                operators[currentIndex] += cleaned[i]
             } else {
-                i += 1
+                currentIndex = -1
             }
         }
 
-        return cleaned.toString()
+        for ((k, v) in operators.entries) {
+            println("$k, $v")
+        }
+
+        return operators.toString()
     }
 
     fun evaluateExpression() {

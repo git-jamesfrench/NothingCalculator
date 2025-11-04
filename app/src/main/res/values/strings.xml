@@ -7,4 +7,5 @@
     <string name="clipdata_result">Result</string>
     <string name="division_by_zero">⚠ Division by zero</string>
     <string name="invalid_format">⚠ Invalid format</string>
+    <string name="back">Back</string>
 </resources>

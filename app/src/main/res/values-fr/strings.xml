@@ -8,4 +8,5 @@
     <string name="clipdata_result">Résultat</string>
     <string name="division_by_zero">⚠ Division par zéro</string>
     <string name="invalid_format">⚠ Format Invalide</string>
+    <string name="back">Retour</string>
 </resources>

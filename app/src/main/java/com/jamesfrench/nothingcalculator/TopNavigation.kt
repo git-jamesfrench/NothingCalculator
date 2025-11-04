@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.jamesfrench.nothingcalculator.ui.theme.*
 
 @Composable
-fun TopNavigation() {
+fun TopNavigation(onSettingsClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
 
@@ -82,7 +82,8 @@ fun TopNavigation() {
                     leadingIcon = { Icon(painterResource(R.drawable.cog), contentDescription = stringResource(R.string.settings)) },
                     contentPadding = PaddingValues(start = 20.dp, end = 22.dp),
                     onClick = {
-
+                        expanded = false
+                        onSettingsClick()
                     }
                 )
                 //DropdownMenuItem(
