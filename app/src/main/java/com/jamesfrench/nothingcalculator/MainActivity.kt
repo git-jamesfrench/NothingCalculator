@@ -77,7 +77,10 @@ fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewMo
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    TopNavigation(onSettingsClick = { navController.navigate("settings") })
+                    TopNavigation(
+                        onSettingsClick = { navController.navigate("settings") },
+                        onHistoryClick = { navController.navigate("history") }
+                    )
                     Spacer(modifier = Modifier.weight(0.8f))
                     Calculations(sharedViewModel)
                     Spacer(modifier = Modifier.weight(0.3f))
@@ -112,6 +115,33 @@ fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewMo
                     .padding(innerPadding)
             ) {
                 Settings(onSettingsClose = { navController.popBackStack() })
+            }
+        }
+        composable(
+            "history",
+            enterTransition = { slideInHorizontally(
+                initialOffsetX = { fullWidth -> -fullWidth },
+                animationSpec = tween(200, easing = EaseInOut)
+            ) },
+            exitTransition = { slideOutHorizontally(
+                targetOffsetX = { fullWidth -> -fullWidth },
+                animationSpec = tween(200, easing = EaseInOut)
+            ) },
+            popEnterTransition = { slideInHorizontally(
+                initialOffsetX = { fullWidth -> -fullWidth },
+                animationSpec = tween(200, easing = EaseInOut)
+            ) },
+            popExitTransition = { slideOutHorizontally(
+                targetOffsetX = { fullWidth -> -fullWidth },
+                animationSpec = tween(200, easing = EaseInOut)
+            ) },
+        ) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                History(onHistoryClose = { navController.popBackStack() })
             }
         }
     }

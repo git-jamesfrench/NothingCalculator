@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.jamesfrench.nothingcalculator.ui.theme.*
 
 @Composable
-fun TopNavigation(onSettingsClick: () -> Unit) {
+fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
 
@@ -38,7 +38,7 @@ fun TopNavigation(onSettingsClick: () -> Unit) {
             .padding(start = 15.dp, end = 15.dp, top = 15.dp)
     ) {
         IconButton(
-        onClick = {  },
+        onClick = { onHistoryClick() },
         modifier = Modifier
             .size(42.dp)
         ) {
