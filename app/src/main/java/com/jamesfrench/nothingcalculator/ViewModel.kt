@@ -15,7 +15,8 @@ class ResourceProvider(private val context: Context) {
     }
 }
 
-val expressions = listOf<Char>('*', '/', '-', '+')
+val expressions = listOf<Char>('*', '/', '-', '+', '¤')
+val numbers = listOf<Char>('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
 
 class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
     var textState by mutableStateOf(TextFieldValue(""))
@@ -61,7 +62,13 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         } else {
             // Add character
             var textResult = StringBuilder(textState.text)
+            var addition = addition
             var spaceAdded = 1
+
+            // Close bracket if necessary
+            if (addition == "(" && closingBrackets) {
+                addition = ")"
+            }
 
             // Replacement if necessary
             if (textState.selection.length != 0) {
@@ -69,21 +76,20 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             }
 
             // Replacement if last character is an operator (except minus)
-            //if ( !(isExpression(addition) && textState.text.isEmpty()) ) {
-            //    if (isExpression(addition) && isExpression(textState.text[start - 1].toString()) && addition != "–") {
-            //        textResult = textResult.replace(start - 1, start, addition)
-            //        spaceAdded = 0
-            //    } else {
-            //        textResult = textResult.insert(start, addition)
-            //    }
-            //}
+            if (addition.first() !in (expressions - '-') && textState.text.isEmpty()) {
+                if (start > 0 && addition.first() in expressions && textState.text[start - 1] in expressions && addition != "-") {
+                    textResult = textResult.replace(start - 1, start, addition)
+                    spaceAdded = 0
+                } else {
+                    textResult = textResult.insert(start, addition)
+                }
+            }
 
             // Adds "0" if possible
-            //if (addition == "," && (start == 0 || isExpression(textState.text[start - 1].toString()))) {
-            //    textResult = textResult.insert(start, "0")
-            //    spaceAdded = 2
-            //}
-            textResult = textResult.insert(start, addition)
+            if (addition == "," && (start == 0 || textState.text[start - 1] in expressions)) {
+                textResult = textResult.insert(start, "0")
+                spaceAdded = 2
+            }
 
             textState = textState.copy(
                 text = textResult.toString(),
@@ -94,9 +100,9 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         checkSelection()
 
         // Hide cursor if useless
-        //if (textState.selection.length == 0 && textState.text.length == textState.selection.start) {
-        //    clearFocusRequest = true
-        //}
+        if (textState.selection.length == 0 && textState.text.length == textState.selection.start) {
+            clearFocusRequest = true
+        }
 
         // Evaluate
         evaluateExpression()
@@ -106,16 +112,10 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         clearFocusRequest = false
     }
 
-    fun cleanExpression(expression: String): String {
-        val cleaned = StringBuilder(expression)
-
-
-        return cleaned.toString()
-    }
 
     fun evaluateExpression() {
         try {
-            val cleanedExpression = cleanExpression(textState.text)
+            val cleanedExpression = textState.text
 
             if (cleanedExpression.isNotEmpty()) {
                 //val resultExpression = ExpressionBuilder(cleanedExpression).build().evaluate()
@@ -140,10 +140,6 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         val missingBrackets = textState.text.count{ it == '(' } - textState.text.count{ it == ')' }
 
         isRemoveEnabled = textState.selection.start != 0 || textState.selection.length > 0
-        closingBrackets = missingBrackets > 0 && !isExpression(textState.text[textState.selection.start - 1].toString())
-    }
-
-    fun isExpression(char: Any): Boolean {
-        return char.toString() in listOf<String>("*", "/", "-", "+") //("×", "÷", "–", "+")
+        closingBrackets = missingBrackets > 0 && textState.text[textState.selection.start - 1] !in expressions
     }
 }
