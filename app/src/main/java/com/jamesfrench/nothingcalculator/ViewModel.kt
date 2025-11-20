@@ -65,31 +65,12 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             var addition = addition
             var spaceAdded = 1
 
-            // Close bracket if necessary
-            if (addition == "(" && closingBrackets) {
-                addition = ")"
-            }
-
-            // Replacement if necessary
+            // Replacement if selection (Don't remove it!)
             if (textState.selection.length != 0) {
                 textResult = textResult.replace(start, end, "")
             }
 
-            // Replacement if last character is an operator (except minus)
-            if (addition.first() !in (expressions - '-') && textState.text.isEmpty()) {
-                if (start > 0 && addition.first() in expressions && textState.text[start - 1] in expressions && addition != "-") {
-                    textResult = textResult.replace(start - 1, start, addition)
-                    spaceAdded = 0
-                } else {
-                    textResult = textResult.insert(start, addition)
-                }
-            }
-
-            // Adds "0" if possible
-            if (addition == "," && (start == 0 || textState.text[start - 1] in expressions)) {
-                textResult = textResult.insert(start, "0")
-                spaceAdded = 2
-            }
+            textResult = textResult.insert(start, addition) // The most important line
 
             textState = textState.copy(
                 text = textResult.toString(),
