@@ -111,9 +111,9 @@ fun Calculations(viewModel: SharedViewModel) {
         DisableSoftKeyboard {
             CompositionLocalProvider(LocalTextSelectionColors provides customSelectionColors, LocalTextToolbar provides EmptyTextToolbar) {
                 BasicTextField(
-                    value = viewModel.textState,
+                    value = viewModel.equation,
                     onValueChange = {
-                        viewModel.textState = it
+                        viewModel.equation = it
                         viewModel.checkSelection()
                     },
                     cursorBrush = SolidColor(NothingRed),
