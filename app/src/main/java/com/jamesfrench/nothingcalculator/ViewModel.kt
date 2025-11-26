@@ -15,7 +15,7 @@ class ResourceProvider(private val context: Context) {
     }
 }
 
-val expressions = listOf<Char>('*', '/', '-', '+', '¤')
+val expressions = listOf<Char>('*', '/', '-', '+')
 val numbers = listOf<Char>('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
 
 class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
@@ -93,10 +93,47 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         clearFocusRequest = false
     }
 
+    fun cleanExpression(operation: String): String {
+        val cleaned = StringBuilder(operation)
+
+        // Clean missing characters before and after dots
+        var i = 0
+        while (i < cleaned.length) {
+            if (cleaned[i] == '.' && cleaned.getOrElse(i - 1) {'¤'} !in numbers) {
+                cleaned.insert(i, "0")
+                i += 1
+            } else if (cleaned[i] == '.' && cleaned.getOrElse(i + 1) {'¤'} !in numbers) {
+                cleaned.insert(i + 1, "0")
+            }
+            i += 1
+        }
+
+        // Clean operators
+        i = 0
+        while (i < cleaned.length) {
+            if (cleaned[i] in expressions && !(cleaned[i] == '-' && cleaned.getOrElse(i + 1) {'¤'} in numbers + '(')) {
+                println(cleaned[i])
+                if (cleaned.getOrElse(i - 1) {'¤'} !in numbers + ')') {
+                    cleaned.deleteCharAt(i)
+                } else if (cleaned.getOrElse(i + 1) {'¤'} !in numbers + '(' + (if (cleaned.getOrElse(i + 2) {'¤'} in numbers + '(') '-' else null)) {
+                    cleaned.deleteCharAt(i)
+                } else {
+                    i += 1
+                }
+            } else {
+                i += 1
+            }
+        }
+
+        // Close unclosed parentheses
+        repeat(cleaned.count {it == '('} - cleaned.count {it == ')'}) {cleaned.append(')')}
+
+        return cleaned.toString()
+    }
 
     fun evaluateExpression() {
         try {
-            val cleanedExpression = textState.text
+            val cleanedExpression = cleanExpression(textState.text)
 
             if (cleanedExpression.isNotEmpty()) {
                 //val resultExpression = ExpressionBuilder(cleanedExpression).build().evaluate()
@@ -121,6 +158,6 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         val missingBrackets = textState.text.count{ it == '(' } - textState.text.count{ it == ')' }
 
         isRemoveEnabled = textState.selection.start != 0 || textState.selection.length > 0
-        closingBrackets = missingBrackets > 0 && textState.text[textState.selection.start - 1] !in expressions
+        closingBrackets = missingBrackets > 0 && textState.text[textState.selection.start - 1] !in expressions + '('
     }
 }
