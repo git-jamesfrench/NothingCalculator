@@ -47,37 +47,37 @@ import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNothingRed
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 import com.jamesfrench.nothingcalculator.ui.theme.notosans
 
-data class KeysValue(val symbol: Any, val background: Color, val font: FontFamily, val weight: Float, val value: Any = symbol)
+data class KeysValue(val symbol: Any, val category: String, val background: Color, val font: FontFamily, val weight: Float, val value: Any = symbol)
 
 private val KeysValues = listOf(
     listOf(
-        KeysValue("(", NothingRed, ndot77, 1f, "("),
-        KeysValue("%", NothingRed, ndot77, 1f),
-        KeysValue("÷", NothingRed, ndot77, 1f, "/"),
-        KeysValue("×", NothingRed, ndot77, 1f, "*")
+        KeysValue("(", "number", NothingRed, ndot77, 1f, "("),
+        KeysValue("%", "suffix",NothingRed, ndot77, 1f),
+        KeysValue("÷", "operator",NothingRed, ndot77, 1f, "/"),
+        KeysValue("×", "operator",NothingRed, ndot77, 1f, "*")
     ),
     listOf(
-        KeysValue("7", ContrastedGray, notosans, 1f),
-        KeysValue("8", ContrastedGray, notosans, 1f),
-        KeysValue("9", ContrastedGray, notosans, 1f),
-        KeysValue("–", NothingRed, ndot77, 1f, "-")
+        KeysValue("7", "number",ContrastedGray, notosans, 1f),
+        KeysValue("8", "number",ContrastedGray, notosans, 1f),
+        KeysValue("9", "number",ContrastedGray, notosans, 1f),
+        KeysValue("–", "negative",NothingRed, ndot77, 1f, "-")
     ),
     listOf(
-        KeysValue("4", ContrastedGray, notosans, 1f),
-        KeysValue("5", ContrastedGray, notosans, 1f),
-        KeysValue("6", ContrastedGray, notosans, 1f),
-        KeysValue("+", NothingRed, ndot77, 1f)
+        KeysValue("4", "number",ContrastedGray, notosans, 1f),
+        KeysValue("5", "number",ContrastedGray, notosans, 1f),
+        KeysValue("6", "number",ContrastedGray, notosans, 1f),
+        KeysValue("+", "operator",NothingRed, ndot77, 1f)
     ),
     listOf(
-        KeysValue("1", ContrastedGray, notosans, 1f),
-        KeysValue("2", ContrastedGray, notosans, 1f),
-        KeysValue("3", ContrastedGray, notosans, 1f),
-        KeysValue(R.string.decimal, NothingRed, ndot77, 1f, ".")
+        KeysValue("1", "number",ContrastedGray, notosans, 1f),
+        KeysValue("2", "number",ContrastedGray, notosans, 1f),
+        KeysValue("3", "number",ContrastedGray, notosans, 1f),
+        KeysValue(R.string.decimal, "number",NothingRed, ndot77, 1f, ".")
     ),
     listOf(
-        KeysValue("0", ContrastedGray, notosans, 2f),
-        KeysValue("<", DeepWhite, ndot77, 1f),
-        KeysValue("=", NothingRed, ndot77, 1f)
+        KeysValue("0", "number",ContrastedGray, notosans, 2f),
+        KeysValue("<", "del",DeepWhite, ndot77, 1f),
+        KeysValue("=", "equal",NothingRed, ndot77, 1f)
     )
 )
 
@@ -93,7 +93,7 @@ fun squeezedColor(color: Color): Color {
 }
 
 @Composable
-fun Key(viewModel: SharedViewModel, text: String, value: String, background: Color, foreground: Color, font: FontFamily, modifier: Modifier = Modifier) {
+fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, background: Color, foreground: Color, font: FontFamily, modifier: Modifier = Modifier) {
     val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState().value
@@ -132,7 +132,7 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, background: Col
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
-                enabled = if (text == "<") viewModel.isRemoveEnabled else true,
+                enabled = category in viewModel.enabledCategories,
                 onClickLabel = null,
                 role = null,
                 onClick = {
@@ -190,6 +190,7 @@ fun KeysRows(viewModel: SharedViewModel, number: Int) {
                 viewModel,
                 key.symbol as? String ?: stringResource(key.symbol as Int),
                 key.value as String,
+                key.category,
                 key.background,
                 if (key.background == DeepWhite) DeepBlack else DeepWhite,
                 key.font,

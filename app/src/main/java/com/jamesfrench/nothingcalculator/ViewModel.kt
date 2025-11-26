@@ -1,13 +1,18 @@
 package com.jamesfrench.nothingcalculator
 
 import android.content.Context
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import net.objecthunter.exp4j.ExpressionBuilder
+import kotlin.math.exp
 
 class ResourceProvider(private val context: Context) {
     fun getString(resId: Int): String {
@@ -21,6 +26,8 @@ val numbers = listOf<Char>('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
 class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
     var equation by mutableStateOf(TextFieldValue(""))
     var result by mutableStateOf("")
+        private set
+    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to false, "suffix" to false, "equal" to false, "number" to true, "negative" to false)
         private set
 
     var clearFocusRequest by mutableStateOf(false)
@@ -163,6 +170,16 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
     }
 
     fun checkSelection() {
+        val checkSel = StringBuilder(equation.text)
+        val start = if (equation.selection.start < equation.selection.end) equation.selection.start else equation.selection.end
+        val end = if (equation.selection.start < equation.selection.end) equation.selection.end else equation.selection.start
+
+        // TODO: Finish this shit
+        //if (checkSel.getOrElse(end + 1) {'¤'} in expressions) {
+        //
+        //}
+
+
         val missingBrackets = equation.text.count{ it == '(' } - equation.text.count{ it == ')' }
 
         isRemoveEnabled = equation.selection.start != 0 || equation.selection.length > 0
