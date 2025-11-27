@@ -1,5 +1,8 @@
 package com.jamesfrench.nothingcalculator
 
+import android.os.Build
+import android.os.VibrationEffect
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
@@ -21,8 +24,11 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -31,6 +37,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -46,38 +53,39 @@ import com.jamesfrench.nothingcalculator.ui.theme.SqueezedDeepWhite
 import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNothingRed
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 import com.jamesfrench.nothingcalculator.ui.theme.notosans
+import android.os.Vibrator
 
-data class KeysValue(val symbol: Any, val category: String, val background: Color, val font: FontFamily, val weight: Float, val value: Any = symbol)
+data class KeysValue(val symbol: Any, val category: String, val background: Color, val font: FontFamily, val weight: Float, val number_of_pulses: Int, val value: Any = symbol)
 
 private val KeysValues = listOf(
     listOf(
-        KeysValue("(", "number", NothingRed, ndot77, 1f, "("),
-        KeysValue("%", "suffix",NothingRed, ndot77, 1f),
-        KeysValue("÷", "operator",NothingRed, ndot77, 1f, "/"),
-        KeysValue("×", "operator",NothingRed, ndot77, 1f, "*")
+        KeysValue("(", "number", NothingRed, ndot77, 1f, 1, "("),
+        KeysValue("%", "suffix",NothingRed, ndot77, 1f, 1),
+        KeysValue("÷", "operator",NothingRed, ndot77, 1f, 1, "/"),
+        KeysValue("×", "operator",NothingRed, ndot77, 1f, 1, "*")
     ),
     listOf(
-        KeysValue("7", "number",ContrastedGray, notosans, 1f),
-        KeysValue("8", "number",ContrastedGray, notosans, 1f),
-        KeysValue("9", "number",ContrastedGray, notosans, 1f),
-        KeysValue("–", "negative",NothingRed, ndot77, 1f, "-")
+        KeysValue("7", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("8", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("9", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("–", "negative",NothingRed, ndot77, 1f, 1, "-")
     ),
     listOf(
-        KeysValue("4", "number",ContrastedGray, notosans, 1f),
-        KeysValue("5", "number",ContrastedGray, notosans, 1f),
-        KeysValue("6", "number",ContrastedGray, notosans, 1f),
-        KeysValue("+", "operator",NothingRed, ndot77, 1f)
+        KeysValue("4", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("5", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("6", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("+", "operator",NothingRed, ndot77, 1f, 1)
     ),
     listOf(
-        KeysValue("1", "number",ContrastedGray, notosans, 1f),
-        KeysValue("2", "number",ContrastedGray, notosans, 1f),
-        KeysValue("3", "number",ContrastedGray, notosans, 1f),
-        KeysValue(R.string.decimal, "number",NothingRed, ndot77, 1f, ".")
+        KeysValue("1", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("2", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue("3", "number",ContrastedGray, notosans, 1f, 1),
+        KeysValue(R.string.decimal, "number",NothingRed, ndot77, 1f, 1, ".")
     ),
     listOf(
-        KeysValue("0", "number",ContrastedGray, notosans, 2f),
-        KeysValue("<", "del",DeepWhite, ndot77, 1f),
-        KeysValue("=", "equal",NothingRed, ndot77, 1f)
+        KeysValue("0", "number",ContrastedGray, notosans, 2f, 1),
+        KeysValue("<", "del",DeepWhite, ndot77, 1f, 1),
+        KeysValue("=", "equal",NothingRed, ndot77, 1f, 3)
     )
 )
 
@@ -92,8 +100,9 @@ fun squeezedColor(color: Color): Color {
     return squeezedColor
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, background: Color, foreground: Color, font: FontFamily, modifier: Modifier = Modifier) {
+fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, background: Color, foreground: Color, font: FontFamily, number_of_pulses: Int, modifier: Modifier = Modifier) {
     val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState().value
@@ -116,6 +125,31 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, category: Strin
             tween(150, easing = EaseIn)
     )
 
+    var hapticEngine by remember { mutableStateOf<VibrationEffect?>(null) }
+    val context = LocalContext.current
+
+    // https://medium.com/@jpmtech/haptics-in-jetpack-compose-06ac8adaf985
+    // May change the code when i'm a bit more advanced in programming apps
+    LaunchedEffect(key1 = Unit) {
+        val numberOfPulses = number_of_pulses // Number of increasing haptic pulses
+        val pulseDuration = 20L // Duration of each pulse in milliseconds
+        val spaceBetweenPulses = 20L // Duration of space between pulses in milliseconds
+        val maxAmplitude = 255 // Maximum amplitude for the last pulse
+
+        val timings = LongArray(numberOfPulses * 2) // Double the size for on/off
+        val amplitudes = IntArray(numberOfPulses * 2)
+
+        for (i in 0 until numberOfPulses) {
+            val amplitude = (maxAmplitude * (i + 1) / numberOfPulses) // Calculate increasing amplitude
+            timings[i * 2] = spaceBetweenPulses // Space before the pulse
+            timings[i * 2 + 1] = pulseDuration // Duration of the pulse
+            amplitudes[i * 2] = 0 // Amplitude of the space
+            amplitudes[i * 2 + 1] = amplitude // Amplitude of the pulse
+        }
+
+        hapticEngine = VibrationEffect.createWaveform(timings, amplitudes, -1)
+    }
+
     Box(
         modifier = modifier
             .drawBehind {
@@ -136,7 +170,11 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, category: Strin
                 onClickLabel = null,
                 role = null,
                 onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    //haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    hapticEngine?.let {
+                        val vibrator = context.getSystemService(Vibrator::class.java)
+                        vibrator.vibrate(it)
+                    }
                     viewModel.keyPressed(value)
                 }
             ),
@@ -194,6 +232,7 @@ fun KeysRows(viewModel: SharedViewModel, number: Int) {
                 key.background,
                 if (key.background == DeepWhite) DeepBlack else DeepWhite,
                 key.font,
+                key.number_of_pulses,
                 modifier = Modifier
                     .weight(key.weight)
                     .aspectRatio(1f * key.weight)
