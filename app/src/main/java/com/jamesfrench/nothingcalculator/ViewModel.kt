@@ -39,6 +39,13 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
 
     var error: String? = null
 
+    fun changeEquation(text: String, selection: Int) {
+        equation = equation.copy(
+            text = text.replace(".", resourceProvider.getString(R.string.decimal)),
+            selection = TextRange(selection)
+        )
+    }
+
     fun keyPressed(key: String) {
         val start = if (equation.selection.start < equation.selection.end) equation.selection.start else equation.selection.end
         val end = if (equation.selection.start < equation.selection.end) equation.selection.end else equation.selection.start
@@ -55,19 +62,13 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
                 textResult = textResult.replace(start, end, "")
             }
 
-            equation = equation.copy(
-                text = textResult.toString(),
-                selection = TextRange(start + cursorPlacement)
-            )
+            changeEquation(textResult.toString(), start + cursorPlacement)
 
             evaluateExpression()
         } else if (key == "=") {
             if (error == null) {
                 if (result.isNotEmpty()) {
-                    equation = equation.copy(
-                        text = result,
-                        selection = TextRange(result.length)
-                    )
+                    changeEquation(result, result.length)
                 }
             } else {
                 result = error ?: ""
@@ -85,10 +86,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
 
             textResult = textResult.insert(start, addition) // The most important line
 
-            equation = equation.copy(
-                text = textResult.toString(),
-                selection = TextRange(start + spaceAdded)
-            )
+            changeEquation(textResult.toString(), start + spaceAdded)
 
             evaluateExpression()
         }
