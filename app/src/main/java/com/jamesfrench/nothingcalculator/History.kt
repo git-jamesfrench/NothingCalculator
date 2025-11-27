@@ -1,7 +1,9 @@
 package com.jamesfrench.nothingcalculator
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,30 +29,41 @@ fun History(onHistoryClose: () -> Unit) {
             .background(DeepBlack)
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 15.dp, end = 15.dp, top = 15.dp),
-        contentAlignment = Alignment.CenterStart
+    Column(
+        modifier = Modifier.fillMaxSize()
     ) {
-        IconButton(
-            onClick = { onHistoryClose() },
+        Box(
             modifier = Modifier
-                .size(42.dp)
+                .fillMaxWidth()
+                .padding(start = 15.dp, end = 15.dp, top = 15.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            )
-            Icon(
-                painter = painterResource(R.drawable.back),
-                contentDescription = stringResource(R.string.back)
+            IconButton(
+                onClick = { onHistoryClose() },
+                modifier = Modifier
+                    .size(42.dp)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                )
+                Icon(
+                    painter = painterResource(R.drawable.back),
+                    contentDescription = stringResource(R.string.back)
+                )
+            }
+            Text(
+                text = stringResource(R.string.history),
+                fontFamily = ndot77,
+                fontSize = 26.sp,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
-        Text(
-            text = stringResource(R.string.history),
-            fontFamily = ndot77,
-            fontSize = 26.sp,
-            modifier = Modifier.align(Alignment.Center)
-        )
+        Column (
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text("History is still in development!")
+        }
     }
 }
