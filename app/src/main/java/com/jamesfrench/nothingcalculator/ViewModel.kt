@@ -93,6 +93,9 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             if (equation.selection.length != 0) {
                 textResult = textResult.replace(start, end, "")
             }
+            if (addition == "(" && closingBrackets) {
+                addition = ")"
+            }
 
             textResult = textResult.insert(start, addition) // The most important line
 
