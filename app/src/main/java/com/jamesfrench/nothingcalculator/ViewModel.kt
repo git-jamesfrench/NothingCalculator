@@ -27,7 +27,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
     var equation by mutableStateOf(TextFieldValue(""))
     var result by mutableStateOf("")
         private set
-    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to true, "suffix" to true, "equal" to false, "number" to true, "negative" to true)
+    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to true, "suffix" to false, "equal" to false, "number" to true, "negative" to true)
         private set
     var showResult = mutableStateOf(false)
         private set
