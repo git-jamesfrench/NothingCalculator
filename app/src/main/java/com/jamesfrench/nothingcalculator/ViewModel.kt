@@ -53,7 +53,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
 
     fun checkAvailableButtons() {
         enabledCategories["del"] = equation.text.isNotEmpty()
-        enabledCategories["equal"] = equation.text.isNotEmpty()
+        enabledCategories["equal"] = showResult.value // Only work if result is shown, simplifies things
     }
 
     fun keyPressed(key: String) {
