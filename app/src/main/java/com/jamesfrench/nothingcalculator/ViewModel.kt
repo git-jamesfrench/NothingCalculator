@@ -41,7 +41,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
 
     fun changeEquation(text: String, selection: Int) {
         equation = equation.copy(
-            text = text.replace(".", resourceProvider.getString(R.string.decimal)),
+            text = text,
             selection = TextRange(selection)
         )
     }

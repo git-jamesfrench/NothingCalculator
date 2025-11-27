@@ -43,7 +43,12 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.TextToolbarStatus
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,6 +92,24 @@ object EmptyTextToolbar: TextToolbar {
     }
 }
 
+// this one was completely made by chatgpt, he made a good response for once and i'm not dumb enough to try to code it myself
+class DotToCommaTransformation(val decimal: String) : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText {
+        val transformed = text.text.replace(".", decimal)
+
+        val offsetTranslator = object : OffsetMapping {
+            override fun originalToTransformed(offset: Int): Int = offset
+            override fun transformedToOriginal(offset: Int): Int = offset
+        }
+
+        return TransformedText(
+            AnnotatedString(transformed),
+            offsetTranslator
+        )
+    }
+}
+
+
 @Composable
 fun Calculations(viewModel: SharedViewModel) {
     val customSelectionColors = TextSelectionColors(
@@ -116,6 +139,7 @@ fun Calculations(viewModel: SharedViewModel) {
                         viewModel.equation = it
                         viewModel.checkSelection()
                     },
+                    visualTransformation = DotToCommaTransformation(stringResource(R.string.decimal)),
                     cursorBrush = SolidColor(NothingRed),
                     textStyle = TextStyle(color = DeepWhite, fontSize = 32.sp, fontFamily = notosans, textAlign = TextAlign.End),
                     modifier = Modifier
