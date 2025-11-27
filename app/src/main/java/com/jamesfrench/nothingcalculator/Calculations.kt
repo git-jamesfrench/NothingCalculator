@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -95,7 +96,11 @@ object EmptyTextToolbar: TextToolbar {
 // this one was completely made by chatgpt, he made a good response for once and i'm not dumb enough to try to code it myself
 class DotToCommaTransformation(val decimal: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
-        val transformed = text.text.replace(".", decimal)
+        val transformed = text.text
+            .replace(".", decimal)
+            .replace("*", "×")
+            .replace("/", "÷")
+            .replace("-", "–")
 
         val offsetTranslator = object : OffsetMapping {
             override fun originalToTransformed(offset: Int): Int = offset
@@ -168,7 +173,7 @@ fun Result(viewModel: SharedViewModel) {
     )
 
     Text(
-        text = viewModel.result,
+        text = if (viewModel.showResult.value) viewModel.result else "",
         color = DeepWhite,
         fontSize = textSize,
         fontFamily = ndot77,

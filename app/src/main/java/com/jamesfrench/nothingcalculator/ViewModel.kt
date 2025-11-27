@@ -27,7 +27,9 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
     var equation by mutableStateOf(TextFieldValue(""))
     var result by mutableStateOf("")
         private set
-    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to false, "suffix" to false, "equal" to false, "number" to true, "negative" to false)
+    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to true, "suffix" to true, "equal" to false, "number" to true, "negative" to true)
+        private set
+    var showResult = mutableStateOf(false)
         private set
 
     var clearFocusRequest by mutableStateOf(false)
@@ -44,6 +46,14 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             text = text,
             selection = TextRange(selection)
         )
+        checkAvailableButtons()
+        val sequences = equation.text.split(regex=Regex("[()*/+-]")).filter { it != "" }
+        showResult.value = sequences.size > 1
+    }
+
+    fun checkAvailableButtons() {
+        enabledCategories["del"] = equation.text.isNotEmpty()
+        enabledCategories["equal"] = equation.text.isNotEmpty()
     }
 
     fun keyPressed(key: String) {
@@ -168,16 +178,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
     }
 
     fun checkSelection() {
-        val checkSel = StringBuilder(equation.text)
-        val start = if (equation.selection.start < equation.selection.end) equation.selection.start else equation.selection.end
-        val end = if (equation.selection.start < equation.selection.end) equation.selection.end else equation.selection.start
-
-        // TODO: Finish this shit
-        //if (checkSel.getOrElse(end + 1) {'¤'} in expressions) {
-        //
-        //}
-
-
+        checkAvailableButtons()
         val missingBrackets = equation.text.count{ it == '(' } - equation.text.count{ it == ')' }
 
         isRemoveEnabled = equation.selection.start != 0 || equation.selection.length > 0

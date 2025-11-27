@@ -132,7 +132,7 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, category: Strin
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
-                enabled = category in viewModel.enabledCategories,
+                enabled = viewModel.enabledCategories[category] == true, // this stupid thing wants me to put "== true" which is completely useless, I WANT TO GO BACK TO PYTHON!!
                 onClickLabel = null,
                 role = null,
                 onClick = {
