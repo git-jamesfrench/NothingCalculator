@@ -7,11 +7,13 @@ This app is not at all affiliated with [Nothing](https://nothing.tech), for any 
 ## <p align="center">Roadmap</p>
 
 ### For release
-- [ ] Fully working calculation system
+- [X] Interface
+- [X] Fully working calculation system
+- [ ] Pourcentage (%)
 - [ ] Settings
 - [ ] History
-- [X] Interface
 ### Updates
+- [ ] Tabs header
 - [ ] Light Mode
 - [ ] Paysage Mode
 - [ ] Scientific Mode
