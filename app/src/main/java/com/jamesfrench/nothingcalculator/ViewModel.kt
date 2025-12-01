@@ -78,7 +78,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         } else if (key == "=") {
             if (error == null) {
                 if (result.isNotEmpty()) {
-                    changeEquation(result, result.length)
+                    changeEquation(result.replace(resourceProvider.getString(R.string.decimal), "."), result.length)
                 }
             } else {
                 result = error ?: ""
