@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.accompanist.navigation.animation)
+    implementation("com.ezylang:EvalEx:3.5.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

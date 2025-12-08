@@ -1,18 +1,18 @@
 package com.jamesfrench.nothingcalculator
 
 import android.content.Context
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.core.net.ParseException
 import androidx.lifecycle.ViewModel
-import net.objecthunter.exp4j.ExpressionBuilder
-import kotlin.math.exp
+import com.ezylang.evalex.BaseException
+import com.ezylang.evalex.Expression
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class ResourceProvider(private val context: Context) {
     fun getString(resId: Int): String {
@@ -158,22 +158,34 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             val cleanedExpression = cleanExpression(equation.text)
 
             if (cleanedExpression.isNotEmpty()) {
-                val resultExpression = ExpressionBuilder(cleanedExpression).build().evaluate()
+                val expression = Expression(cleanedExpression)
+                    .evaluate()
+                    .numberValue
+                val resultExpression = expression
+                    .setScale(expression.scale().coerceAtMost(15), RoundingMode.HALF_UP)
+                    .let {
+                        if (it.abs() > BigDecimal(10_000_000_000)) {
+                            it.toEngineeringString()
+                        } else {
+                            it.toPlainString()
+                        }
+                    }
 
-                val resultOfCalculation = resultExpression.toString()
+                val resultOfCalculation = resultExpression
                     .removeSuffix(".0")
                     .replace(".", resourceProvider.getString(R.string.decimal))
                     .replace("E", "e")
 
                 error = null
                 result = resultOfCalculation
+
             } else { result = "" }
-        } catch (e: ArithmeticException) {
-            result = ""
-            error = resourceProvider.getString(R.string.division_by_zero)
-        } catch (e: IllegalArgumentException) {
-            result = ""
-            error = resourceProvider.getString(R.string.invalid_format)
+        } catch (e: BaseException) {
+            when (e.message) {
+                "Division by zero" -> {result = ""; error = resourceProvider.getString(R.string.division_by_zero)}
+                "Missing second operand for operator" -> {result = ""; error = resourceProvider.getString(R.string.invalid_format)}
+                else -> {result = ""; error = "⚠\n $e"}
+            }
         } catch (e: Exception) {
             result = ""
             error = "⚠\n $e"
