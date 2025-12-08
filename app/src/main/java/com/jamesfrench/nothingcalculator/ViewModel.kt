@@ -46,8 +46,8 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             selection = TextRange(selection)
         )
         checkAvailableButtons()
-        val sequences = equation.text.split(regex=Regex("[()*/+-]")).filter { it != "" }
-        showResult.value = sequences.size > 1
+        val sequences = equation.text.replace("e+", "").split(regex=Regex("[()*/+-]")).filter { it != "" }
+        showResult.value = sequences.size + equation.text.count { it == '%' } > 1
     }
 
     fun checkAvailableButtons() {
