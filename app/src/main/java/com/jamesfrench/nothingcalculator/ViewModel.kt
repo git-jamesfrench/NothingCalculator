@@ -183,6 +183,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             when (e.message) {
                 "Division by zero" -> {result = ""; error = resourceProvider.getString(R.string.division_by_zero)}
                 "Missing second operand for operator" -> {result = ""; error = resourceProvider.getString(R.string.invalid_format)}
+                "Too many operands" -> {result = ""; error = resourceProvider.getString(R.string.invalid_format)}
                 else -> {result = ""; error = "⚠\n $e"}
             }
         } catch (e: Exception) {
