@@ -78,7 +78,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         } else if (key == "=") {
             if (error == null) {
                 if (result.isNotEmpty()) {
-                    changeEquation(result.replace(resourceProvider.getString(R.string.decimal), "."), result.length)
+                    changeEquation(result, result.length)
                 }
             } else {
                 result = error ?: ""
@@ -173,7 +173,6 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
 
                 val resultOfCalculation = resultExpression
                     .removeSuffix(".0")
-                    .replace(".", resourceProvider.getString(R.string.decimal))
                     .replace("E", "e")
 
                 error = null

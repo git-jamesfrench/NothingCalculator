@@ -173,7 +173,7 @@ fun Result(viewModel: SharedViewModel) {
     )
 
     Text(
-        text = if (viewModel.showResult.value) viewModel.result else "",
+        text = if (viewModel.showResult.value) viewModel.result.replace(".", stringResource(R.string.decimal)) else "",
         color = DeepWhite,
         fontSize = textSize,
         fontFamily = ndot77,
