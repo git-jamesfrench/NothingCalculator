@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.net.ParseException
 import androidx.lifecycle.ViewModel
 import com.ezylang.evalex.BaseException
 import com.ezylang.evalex.Expression
@@ -21,13 +20,13 @@ class ResourceProvider(private val context: Context) {
 }
 
 val expressions = listOf<Char>('*', '/', '-', '+')
-val numbers = listOf<Char>('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
+val numbers = listOf<Char>('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '%')
 
 class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
     var equation by mutableStateOf(TextFieldValue(""))
     var result by mutableStateOf("")
         private set
-    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to true, "suffix" to false, "equal" to false, "number" to true, "negative" to true)
+    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to true, "suffix" to true, "equal" to false, "number" to true, "negative" to true)
         private set
     var showResult = mutableStateOf(false)
         private set
@@ -158,7 +157,8 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             val cleanedExpression = cleanExpression(equation.text)
 
             if (cleanedExpression.isNotEmpty()) {
-                val expression = Expression(cleanedExpression)
+                val expression = Expression(cleanedExpression.replace("%", "p"))
+                    .with("p", 0.01) // Yes, this is degusting...
                     .evaluate()
                     .numberValue
                 val resultExpression = expression
