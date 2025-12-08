@@ -21,6 +21,7 @@ class ResourceProvider(private val context: Context) {
 
 val expressions = listOf('*', '/', '-', '+')
 val numbers = listOf('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '%')
+val parentheses = listOf('(', ')')
 
 class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
     var equation by mutableStateOf(TextFieldValue(""))
@@ -46,13 +47,30 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             selection = TextRange(selection)
         )
         checkAvailableButtons()
-        val sequences = equation.text.replace("e+", "").split(regex=Regex("[()*/+-]")).filter { it != "" }
-        showResult.value = sequences.size + equation.text.count { it == '%' } > 1
     }
 
     fun checkAvailableButtons() {
         enabledCategories["del"] = equation.text.isNotEmpty()
         enabledCategories["equal"] = showResult.value // Only work if result is shown, simplifies things
+    }
+
+    fun sanitizeValueChange(value: TextFieldValue): TextFieldValue {
+        val start = if (value.selection.start < value.selection.end) value.selection.start else value.selection.end
+        val end = if (value.selection.start < value.selection.end) value.selection.end else value.selection.start
+
+        val sanitized = value.text
+            .replace("×", "*")
+            .replace("x", "*")
+            .replace("÷", "/")
+            .replace("–", "-")
+            .replace(resourceProvider.getString(R.string.decimal), ".")
+            .filter { !it.isWhitespace() }
+            .filter { it in numbers + expressions + parentheses + '.' }
+        equation = value.copy(
+            text = sanitized,
+            selection = TextRange(start - (value.text.length - sanitized.length), end - (value.text.length - sanitized.length))
+        )
+        return equation
     }
 
     fun keyPressed(key: String) {
@@ -193,10 +211,15 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
     }
 
     fun checkSelection() {
-        checkAvailableButtons()
+        evaluateExpression()
         val missingBrackets = equation.text.count{ it == '(' } - equation.text.count{ it == ')' }
 
         isRemoveEnabled = equation.selection.start != 0 || equation.selection.length > 0
         closingBrackets = missingBrackets > 0 && equation.text[equation.selection.start - 1] !in expressions + '('
+
+        val sequences = equation.text.replace("e+", "").split(regex=Regex("[()*/+-]")).filter { it != "" }
+        showResult.value = sequences.size + equation.text.count { it == '%' } > 1
+
+        checkAvailableButtons()
     }
 }

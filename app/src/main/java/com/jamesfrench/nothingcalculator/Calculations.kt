@@ -78,16 +78,16 @@ import kotlinx.coroutines.awaitCancellation
 }
 
 object EmptyTextToolbar: TextToolbar {
-    override val status: TextToolbarStatus = TextToolbarStatus.Hidden
+    override fun hide() {}
 
-    override fun hide() {  }
+    override val status: TextToolbarStatus = TextToolbarStatus.Hidden
 
     override fun showMenu(
         rect: Rect,
         onCopyRequested: (() -> Unit)?,
         onPasteRequested: (() -> Unit)?,
         onCutRequested: (() -> Unit)?,
-        onSelectAllRequested: (() -> Unit)?,
+        onSelectAllRequested: (() -> Unit)?
     ) {
     }
 }
@@ -140,7 +140,7 @@ fun Calculations(viewModel: SharedViewModel) {
                 BasicTextField(
                     value = viewModel.equation,
                     onValueChange = {
-                        viewModel.equation = it
+                        viewModel.equation = viewModel.sanitizeValueChange(it)
                         viewModel.checkSelection()
                     },
                     visualTransformation = DotToCommaTransformation(stringResource(R.string.decimal)),
