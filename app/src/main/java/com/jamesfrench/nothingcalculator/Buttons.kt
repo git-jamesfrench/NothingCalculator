@@ -36,9 +36,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -55,7 +53,7 @@ import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 import com.jamesfrench.nothingcalculator.ui.theme.notosans
 import android.os.Vibrator
 
-data class KeysValue(val symbol: Any, val category: String, val background: Color, val font: FontFamily, val weight: Float, val number_of_pulses: Int, val value: Any = symbol)
+data class KeysValue(val symbol: Any, val category: String, val background: Color, val font: FontFamily, val weight: Float, val numberOfPulses: Int, val value: Any = symbol)
 
 private val KeysValues = listOf(
     listOf(
@@ -102,8 +100,7 @@ fun squeezedColor(color: Color): Color {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, background: Color, foreground: Color, font: FontFamily, number_of_pulses: Int, modifier: Modifier = Modifier) {
-    val haptic = LocalHapticFeedback.current
+fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, background: Color, foreground: Color, font: FontFamily, numberOfPulses: Int, modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState().value
     val character = if (text == "(") {
@@ -131,7 +128,7 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, category: Strin
     // https://medium.com/@jpmtech/haptics-in-jetpack-compose-06ac8adaf985
     // May change the code when i'm a bit more advanced in programming apps
     LaunchedEffect(key1 = Unit) {
-        val numberOfPulses = number_of_pulses // Number of increasing haptic pulses
+        val numberOfPulses = numberOfPulses // Number of increasing haptic pulses
         val pulseDuration = 20L // Duration of each pulse in milliseconds
         val spaceBetweenPulses = 20L // Duration of space between pulses in milliseconds
         val maxAmplitude = 255 // Maximum amplitude for the last pulse
@@ -232,7 +229,7 @@ fun KeysRows(viewModel: SharedViewModel, number: Int) {
                 key.background,
                 if (key.background == DeepWhite) DeepBlack else DeepWhite,
                 key.font,
-                key.number_of_pulses,
+                key.numberOfPulses,
                 modifier = Modifier
                     .weight(key.weight)
                     .aspectRatio(1f * key.weight)

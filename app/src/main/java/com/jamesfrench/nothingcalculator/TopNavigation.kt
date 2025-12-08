@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
@@ -30,7 +29,6 @@ import com.jamesfrench.nothingcalculator.ui.theme.*
 @Composable
 fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    val uriHandler = LocalUriHandler.current
 
     Row(
         modifier = Modifier

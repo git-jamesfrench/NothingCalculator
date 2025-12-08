@@ -19,14 +19,14 @@ class ResourceProvider(private val context: Context) {
     }
 }
 
-val expressions = listOf<Char>('*', '/', '-', '+')
-val numbers = listOf<Char>('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '%')
+val expressions = listOf('*', '/', '-', '+')
+val numbers = listOf('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '%')
 
 class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewModel() {
     var equation by mutableStateOf(TextFieldValue(""))
     var result by mutableStateOf("")
         private set
-    var enabledCategories = mutableStateMapOf<String, Boolean>("del" to false, "operator" to true, "suffix" to true, "equal" to false, "number" to true, "negative" to true)
+    var enabledCategories = mutableStateMapOf("del" to false, "operator" to true, "suffix" to true, "equal" to false, "number" to true, "negative" to true)
         private set
     var showResult = mutableStateOf(false)
         private set
@@ -86,7 +86,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             // Add character
             var textResult = StringBuilder(equation.text)
             var addition = key
-            var spaceAdded = 1
+            val spaceAdded = 1
 
             // Replacement if selection (Don't remove it!)
             if (equation.selection.length != 0) {
