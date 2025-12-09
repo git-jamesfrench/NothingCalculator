@@ -104,7 +104,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             // Add character
             var textResult = StringBuilder(equation.text)
             var addition = key
-            val spaceAdded = 1
+            var spaceAdded = 1
 
             // Replacement if selection (Don't remove it!)
             if (equation.selection.length != 0) {
@@ -112,6 +112,11 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             }
             if (addition == "(" && closingBrackets) {
                 addition = ")"
+            }
+            // Adds 0 automatically for gain of time (experimental)
+            if (addition == "." && equation.text.getOrElse(start - 1) {'*'} in expressions) {
+                addition = "0."
+                spaceAdded += 1
             }
 
             textResult = textResult.insert(start, addition) // The most important line
