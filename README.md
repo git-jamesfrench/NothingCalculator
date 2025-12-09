@@ -10,7 +10,7 @@ This app is not at all affiliated with [Nothing](https://nothing.tech), for any 
 - [X] Interface
 - [X] Fully working calculation system
 - [X] Pourcentage (%)
-- [ ] Settings
+- [X] Settings (Working on more settings)
 - [ ] History
 ### Others
 - [ ] Tabs header
@@ -45,6 +45,7 @@ This application and Github repository is using:
 - Ndot-57, Ndot-55 and NType-82 from [Nothing](https://nothing.tech).
 - Noto Sans by the [Noto Fonts Project](https://github.com/notofonts).
 - Icons from [Lucide](https://lucide.dev/).
+- Settings design inspired by [Noto](https://github.com/alialbaali/Noto).
 
 ## <div align="center">Contact Us</div>
 
