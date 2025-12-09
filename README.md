@@ -21,7 +21,7 @@ This app is not at all affiliated with [Nothing](https://nothing.tech), for any 
 - [ ] Conversions Mode
 - [ ] Header Menu
 
-## <p align="center">Roadmap</p>
+## <p align="center">License</p>
 
 Jamesfrench's Calculator - Calculator design with the Nothing branding.</br>
 Copyright (C) 2025  James French
