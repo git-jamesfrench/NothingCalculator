@@ -126,7 +126,7 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
             evaluateExpression()
         }
 
-        checkSelection()
+        checkSelection(evaluate = false)
 
         // Hide cursor if useless
         if (equation.selection.length == 0 && equation.text.length == equation.selection.start) {
@@ -215,8 +215,10 @@ class SharedViewModel(private val resourceProvider: ResourceProvider) : ViewMode
         }
     }
 
-    fun checkSelection() {
-        evaluateExpression()
+    fun checkSelection(evaluate: Boolean = true) {
+        if (evaluate) { // I know it's horrible, but for my defense, it's literally my first ever android application.
+            evaluateExpression()
+        }
         val missingBrackets = equation.text.count{ it == '(' } - equation.text.count{ it == ')' }
 
         isRemoveEnabled = equation.selection.start != 0 || equation.selection.length > 0
