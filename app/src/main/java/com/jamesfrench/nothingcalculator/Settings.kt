@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,7 +52,9 @@ import com.jamesfrench.nothingcalculator.ui.theme.normalText
 @Composable
 fun Settings(onSettingsClose: () -> Unit) {
     val context = LocalContext.current
-    val packageManager = context.packageName
+    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+    val appVersion = packageInfo.versionName
+    val uriHandler = LocalUriHandler.current
 
     Box(
         modifier = Modifier
@@ -100,10 +103,13 @@ fun Settings(onSettingsClose: () -> Unit) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(NotSoContrastedGray)
             ) {
-                Setting(R.string.theme, R.drawable.theme, {}) {
-
-                }
-                Setting(R.string.language, R.drawable.global, {}) {}
+                Setting(stringResource(R.string.github_page), R.drawable.github, null, {
+                    uriHandler.openUri("https://github.com/git-jamesfrench/NothingCalculator/")
+                }, true) {}
+                Setting(stringResource(R.string.license), R.drawable.scale, stringResource(R.string.gpl3), {
+                    uriHandler.openUri("https://www.gnu.org/licenses/gpl-3.0.html#license-text")
+                }, true) {}
+                Setting(stringResource(R.string.version), R.drawable.hash, appVersion.toString(), {}) {}
             }
         }
     }
@@ -111,9 +117,11 @@ fun Settings(onSettingsClose: () -> Unit) {
 
 @Composable
 fun Setting(
-    title: Int,
+    title: String,
     icon: Int,
+    value: String?,
     onClick: () -> Unit,
+    openIcon: Boolean = false,
     content: @Composable () -> Unit)
 {
     val interactionSource = remember { MutableInteractionSource() }
@@ -138,19 +146,27 @@ fun Setting(
     ) {
         Icon(
             painter = painterResource(icon),
-            contentDescription = stringResource(title),
+            contentDescription = title,
         )
         Text(
-            stringResource(title),
+            title,
             fontWeight = FontWeight(500),
             fontSize = 15.sp
         )
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            stringResource(title),
-            fontWeight = FontWeight(500),
-            fontSize = 15.sp,
-            color = SqueezedDeepWhite
-        )
+        if (!value.isNullOrEmpty()) {
+            Text(
+                value,
+                fontWeight = FontWeight(500),
+                fontSize = 15.sp,
+                color = SqueezedDeepWhite
+            )
+        }
+        if (openIcon) {
+            Icon(
+                painter = painterResource(R.drawable.open),
+                contentDescription = stringResource(R.string.open)
+            )
+        }
     }
 }

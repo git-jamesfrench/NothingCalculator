@@ -13,4 +13,9 @@
     <string name="dark_theme">Dark</string>
     <string name="system_theme">System theme</string>
     <string name="language">Language</string>
+    <string name="version">Version</string>
+    <string name="license">License</string>
+    <string name="gpl3" translatable="false">GPL-3.0</string>
+    <string name="open">Open</string>
+    <string name="github_page">Github Page</string>
 </resources>

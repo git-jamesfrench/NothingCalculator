@@ -14,4 +14,8 @@
     <string name="dark_theme">Dunkel</string>
     <string name="system_theme">Systemthema</string>
     <string name="language">Sprache</string>
+    <string name="version">Version</string>
+    <string name="license">Lizenz</string>
+    <string name="open">Öffnen</string>
+    <string name="github_page">Github-Seite</string>
 </resources>
