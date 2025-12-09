@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.accompanist.navigation.animation)
     implementation("com.ezylang:EvalEx:3.5.0")
+    implementation("androidx.datastore:datastore-preferences:1.2.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

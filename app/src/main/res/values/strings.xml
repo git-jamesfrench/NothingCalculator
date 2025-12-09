@@ -8,4 +8,9 @@
     <string name="division_by_zero">⚠ Division by zero</string>
     <string name="invalid_format">⚠ Invalid format</string>
     <string name="back">Back</string>
+    <string name="theme">Theme</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_theme">System theme</string>
+    <string name="language">Language</string>
 </resources>

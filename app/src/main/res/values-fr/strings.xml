@@ -9,4 +9,9 @@
     <string name="division_by_zero">⚠ Division par zéro</string>
     <string name="invalid_format">⚠ Format Invalide</string>
     <string name="back">Retour</string>
+    <string name="theme">Thème</string>
+    <string name="light_theme">Clair</string>
+    <string name="dark_theme">Sombre</string>
+    <string name="system_theme">Thème système</string>
+    <string name="language">Langue</string>
 </resources>

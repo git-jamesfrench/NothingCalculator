@@ -52,6 +52,8 @@ import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNothingRed
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 import com.jamesfrench.nothingcalculator.ui.theme.notosans
 import android.os.Vibrator
+import com.jamesfrench.nothingcalculator.ui.theme.NotSoContrastedGray
+import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNotSoContrastedGray
 
 data class KeysValue(val symbol: Any, val category: String, val background: Color, val font: FontFamily, val weight: Float, val numberOfPulses: Int, val value: Any = symbol)
 
@@ -94,6 +96,7 @@ fun squeezedColor(color: Color): Color {
         NothingRed -> squeezedColor = SqueezedNothingRed
         ContrastedGray -> squeezedColor = SqueezedContrastedGray
         DeepWhite -> squeezedColor = SqueezedDeepWhite
+        NotSoContrastedGray -> squeezedColor = SqueezedNotSoContrastedGray
     }
     return squeezedColor
 }

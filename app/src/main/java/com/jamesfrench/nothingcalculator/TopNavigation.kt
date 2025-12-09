@@ -45,7 +45,7 @@ fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
             )
             Icon(
                 painter = painterResource(R.drawable.history),
-                contentDescription = stringResource(R.string.history)
+                contentDescription = stringResource(R.string.history),
             )
         }
         Spacer(
@@ -73,7 +73,7 @@ fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
                 onDismissRequest = { expanded = false },
                 offset = DpOffset(0.dp, 6.dp),
                 shape = RoundedCornerShape(19.dp),
-                containerColor = ContrastedGray,
+                containerColor = NotSoContrastedGray,
             ) {
                 DropdownMenuItem(
                     text = { Text(text = stringResource(R.string.settings), style = normalText) },

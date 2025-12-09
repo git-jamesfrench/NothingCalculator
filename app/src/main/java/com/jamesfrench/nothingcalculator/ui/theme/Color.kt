@@ -12,3 +12,6 @@ val SqueezedNothingRed = Color(color = 0xFF7A1014)
 
 val ContrastedGray = Color(0xFF1B1B1D)
 val SqueezedContrastedGray = Color(0xFF343437)
+
+val NotSoContrastedGray = Color(0xFF131315)
+val SqueezedNotSoContrastedGray = Color(0xFF2C2C31)
