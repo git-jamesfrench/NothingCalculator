@@ -11,7 +11,6 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,35 +20,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
 import com.jamesfrench.nothingcalculator.ui.theme.NotSoContrastedGray
 import com.jamesfrench.nothingcalculator.ui.theme.SqueezedDeepWhite
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
-import com.jamesfrench.nothingcalculator.ui.theme.normalText
 
 @Composable
 fun Settings(onSettingsClose: () -> Unit) {
@@ -108,11 +98,11 @@ fun Settings(onSettingsClose: () -> Unit) {
             ) {
                 Setting(stringResource(R.string.github_page), R.drawable.github, null, {
                     uriHandler.openUri("https://github.com/git-jamesfrench/NothingCalculator/")
-                }, true) {}
+                }, true)
                 Setting(stringResource(R.string.license), R.drawable.scale, stringResource(R.string.gpl3), {
                     uriHandler.openUri("https://www.gnu.org/licenses/gpl-3.0.html#license-text")
-                }, true) {}
-                Setting(stringResource(R.string.version), R.drawable.hash, appVersion.toString(), {}) {}
+                }, true)
+                Setting(stringResource(R.string.version), R.drawable.hash, appVersion.toString(), {})
             }
         }
     }
@@ -124,9 +114,8 @@ fun Setting(
     icon: Int,
     value: String?,
     onClick: () -> Unit,
-    openIcon: Boolean = false,
-    content: @Composable () -> Unit)
-{
+    openIcon: Boolean = false
+){
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState().value
 
