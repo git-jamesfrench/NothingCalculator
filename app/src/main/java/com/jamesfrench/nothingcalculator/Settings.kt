@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -45,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
 import com.jamesfrench.nothingcalculator.ui.theme.NotSoContrastedGray
+import com.jamesfrench.nothingcalculator.ui.theme.NothingRed
 import com.jamesfrench.nothingcalculator.ui.theme.SqueezedDeepWhite
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 import com.jamesfrench.nothingcalculator.ui.theme.normalText
@@ -68,7 +71,7 @@ fun Settings(onSettingsClose: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp, top = 15.dp),
+                .padding(start = 15.dp, end = 15.dp, top = 15.dp, bottom = 15.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             IconButton(
@@ -80,7 +83,7 @@ fun Settings(onSettingsClose: () -> Unit) {
                     modifier = Modifier.fillMaxSize()
                 )
                 Icon(
-                    painter = painterResource(R.drawable.back),
+                    painter = painterResource(R.drawable.x),
                     contentDescription = stringResource(R.string.back)
                 )
             }
@@ -94,8 +97,9 @@ fun Settings(onSettingsClose: () -> Unit) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(15.dp),
-            verticalArrangement = Arrangement.Top,
+                .verticalScroll(rememberScrollState())
+                .padding(start = 15.dp, end = 15.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column (
