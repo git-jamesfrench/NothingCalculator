@@ -21,3 +21,5 @@ val NotSoContrastedGray = Color(0xFF131315)
 
 val WhiteButton = Color(color=0xFFE3E3E3)
 val WhiteButtonPressed = Color(color=0xFFC5C5C5)
+
+val BlindingBackground = Color(color = 0x39000000)

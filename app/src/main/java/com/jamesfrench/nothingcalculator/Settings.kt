@@ -18,9 +18,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,15 +40,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jamesfrench.nothingcalculator.ui.theme.BlindingBackground
 import com.jamesfrench.nothingcalculator.ui.theme.NotSoContrastedGray
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Settings(onSettingsClose: () -> Unit) {
     val context = LocalContext.current
     val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
     val appVersion = packageInfo.versionName
     val uriHandler = LocalUriHandler.current
+
+    val expand = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    var expanded by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -97,6 +107,13 @@ fun Settings(onSettingsClose: () -> Unit) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(NotSoContrastedGray)
             ) {
+                Setting(stringResource(R.string.theme), R.drawable.theme, stringResource(R.string.dark_theme), {expanded = !expanded}, false)
+            }
+            Column (
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(NotSoContrastedGray)
+            ) {
                 Setting(stringResource(R.string.github_page), R.drawable.github, null, {
                     uriHandler.openUri("https://github.com/git-jamesfrench/NothingCalculator/")
                 }, true)
@@ -105,6 +122,17 @@ fun Settings(onSettingsClose: () -> Unit) {
                 }, true)
                 Setting(stringResource(R.string.version), R.drawable.hash, appVersion.toString(), {})
             }
+        }
+    }
+
+    if (expanded) {
+        ModalBottomSheet(
+            onDismissRequest = { expanded = false },
+            sheetState = expand,
+            containerColor = T.colors.buttonPrimary,
+            scrimColor = BlindingBackground
+        ) {
+
         }
     }
 }
