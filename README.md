@@ -14,7 +14,7 @@ This app is not at all affiliated with [Nothing](https://nothing.tech), for any 
 - [ ] History
 ### Others
 - [ ] Tabs header
-- [ ] Light Mode
+- [X] Light Mode
 - [ ] Paysage Mode
 - [ ] Scientific Mode
 - [ ] Customizations

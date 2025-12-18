@@ -75,10 +75,10 @@ fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
                 onDismissRequest = { expanded = false },
                 offset = DpOffset(0.dp, 6.dp),
                 shape = RoundedCornerShape(19.dp),
-                containerColor = T.colors.buttonContainer,
+                containerColor = T.colors.buttonPrimary,
             ) {
                 DropdownMenuItem(
-                    text = { Text(text = stringResource(R.string.settings), style = normalText) },
+                    text = { Text(text = stringResource(R.string.settings), style = normalText, color = T.colors.textPrimary) },
                     leadingIcon = {
                         Icon(
                             painterResource(R.drawable.cog),

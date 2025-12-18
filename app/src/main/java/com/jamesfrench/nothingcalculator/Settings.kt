@@ -36,9 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
 import com.jamesfrench.nothingcalculator.ui.theme.NotSoContrastedGray
-import com.jamesfrench.nothingcalculator.ui.theme.SqueezedDeepWhite
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 
 @Composable
@@ -73,14 +71,16 @@ fun Settings(onSettingsClose: () -> Unit) {
                 )
                 Icon(
                     painter = painterResource(R.drawable.x),
-                    contentDescription = stringResource(R.string.back)
+                    contentDescription = stringResource(R.string.back),
+                    tint = T.colors.iconsPrimary
                 )
             }
             Text(
                 text = stringResource(R.string.settings),
                 fontFamily = ndot77,
                 fontSize = 26.sp,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
+                color = T.colors.textPrimary
             )
         }
         Column (
@@ -120,7 +120,7 @@ fun Setting(
     val isPressed = interactionSource.collectIsPressedAsState().value
 
     val color by animateColorAsState(
-        targetValue = if (isPressed) squeezedColor(NotSoContrastedGray) else NotSoContrastedGray,
+        targetValue = if (isPressed) T.colors.buttonPrimaryPressed else T.colors.buttonPrimary,
         animationSpec = if (isPressed)
             tween(25, easing = EaseOut)
         else
@@ -139,11 +139,13 @@ fun Setting(
         Icon(
             painter = painterResource(icon),
             contentDescription = title,
+            tint = T.colors.iconsPrimary
         )
         Text(
             title,
             fontWeight = FontWeight(500),
-            fontSize = 15.sp
+            fontSize = 15.sp,
+            color = T.colors.textPrimary
         )
         Spacer(modifier = Modifier.weight(1f))
         if (!value.isNullOrEmpty()) {
@@ -151,13 +153,14 @@ fun Setting(
                 value,
                 fontWeight = FontWeight(500),
                 fontSize = 15.sp,
-                color = SqueezedDeepWhite
+                color = T.colors.textSecondary
             )
         }
         if (openIcon) {
             Icon(
-                painter = painterResource(R.drawable.open),
-                contentDescription = stringResource(R.string.open)
+                painter = painterResource(R.drawable.open_link),
+                contentDescription = stringResource(R.string.open),
+                tint = T.colors.iconsSecondary
             )
         }
     }

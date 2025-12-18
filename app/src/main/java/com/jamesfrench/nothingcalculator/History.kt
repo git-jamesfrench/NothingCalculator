@@ -18,7 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 
 @Composable
@@ -48,14 +47,16 @@ fun History(onHistoryClose: () -> Unit) {
                 )
                 Icon(
                     painter = painterResource(R.drawable.back),
-                    contentDescription = stringResource(R.string.back)
+                    contentDescription = stringResource(R.string.back),
+                    tint = T.colors.iconsPrimary
                 )
             }
             Text(
                 text = stringResource(R.string.history),
                 fontFamily = ndot77,
                 fontSize = 26.sp,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
+                color = T.colors.textPrimary
             )
         }
         Column (
@@ -63,7 +64,7 @@ fun History(onHistoryClose: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("History is still in development!")
+            Text("History is still in development!", color = T.colors.textPrimary)
         }
     }
 }

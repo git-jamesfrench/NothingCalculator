@@ -2,6 +2,7 @@ package com.jamesfrench.nothingcalculator
 
 import android.os.Build
 import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseIn
@@ -42,18 +43,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jamesfrench.nothingcalculator.ui.theme.ContrastedGray
-import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
 import com.jamesfrench.nothingcalculator.ui.theme.DeepWhite
 import com.jamesfrench.nothingcalculator.ui.theme.NothingRed
-import com.jamesfrench.nothingcalculator.ui.theme.SqueezedContrastedGray
-import com.jamesfrench.nothingcalculator.ui.theme.SqueezedDeepWhite
 import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNothingRed
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 import com.jamesfrench.nothingcalculator.ui.theme.notosans
-import android.os.Vibrator
-import com.jamesfrench.nothingcalculator.ui.theme.NotSoContrastedGray
-import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNotSoContrastedGray
 
 data class KeysValue(val symbol: Any, val category: String, val id: Int, val weight: Float, val numberOfPulses: Int, val value: Any = symbol)
 
@@ -89,18 +83,6 @@ private val KeysValues = listOf(
     )
 )
 
-fun squeezedColor(color: Color): Color {
-    var squeezedColor: Color = NothingRed
-
-    when (color) {
-        NothingRed -> squeezedColor = SqueezedNothingRed
-        ContrastedGray -> squeezedColor = SqueezedContrastedGray
-        DeepWhite -> squeezedColor = SqueezedDeepWhite
-        NotSoContrastedGray -> squeezedColor = SqueezedNotSoContrastedGray
-    }
-    return squeezedColor
-}
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, id: Int, numberOfPulses: Int, modifier: Modifier = Modifier) {
@@ -124,8 +106,8 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, category: Strin
         }
         2 -> {
             background = T.colors.buttonSecondary
-            squeezedBackground = T.colors.buttonPrimaryPressed
-            foreground = T.colors.textPrimary
+            squeezedBackground = T.colors.buttonSecondaryPressed
+            foreground = T.colors.background
             font = ndot77
         }
     }

@@ -13,13 +13,17 @@ import androidx.compose.ui.graphics.Color
 data class ColorScheme(
     val buttonPrimary: Color,
     val buttonPrimaryPressed: Color,
+
     val buttonSecondary: Color,
+    val buttonSecondaryPressed: Color,
 
     val background: Color,
     val buttonContainer: Color,
 
     val textPrimary: Color,
+    val textSecondary: Color,
     val iconsPrimary: Color,
+    val iconsSecondary: Color,
 )
 
 val LocalAppColors = staticCompositionLocalOf<ColorScheme> {
@@ -29,25 +33,33 @@ val LocalAppColors = staticCompositionLocalOf<ColorScheme> {
 val darkTheme = ColorScheme(
     buttonPrimary = ContrastedGray,
     buttonPrimaryPressed = SqueezedContrastedGray,
+
     buttonSecondary = DeepWhite,
+    buttonSecondaryPressed = SqueezedDeepWhite,
 
     background = DeepBlack,
     buttonContainer = ContrastedGray,
 
     textPrimary = DeepWhite,
+    textSecondary = SqueezedDeepWhite,
     iconsPrimary = DeepWhite,
+    iconsSecondary = SqueezedDeepWhite,
 )
 
 val lightTheme = ColorScheme(
     buttonPrimary = WhiteButton,
     buttonPrimaryPressed = WhiteButtonPressed,
-    buttonSecondary = DeepWhite,
+
+    buttonSecondary = DeepBlack,
+    buttonSecondaryPressed = SqueezedDeepBlack,
 
     background = DeepWhite,
     buttonContainer = ContrastedGray,
 
     textPrimary = DeepBlack,
+    textSecondary = TooSqueezedDeepBlack,
     iconsPrimary = DeepBlack,
+    iconsSecondary = TooSqueezedDeepBlack,
 )
 
 @RequiresApi(Build.VERSION_CODES.R)
