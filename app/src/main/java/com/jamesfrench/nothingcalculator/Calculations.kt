@@ -1,5 +1,6 @@
 package com.jamesfrench.nothingcalculator
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseIn
@@ -52,9 +53,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jamesfrench.nothingcalculator.ui.theme.ContrastedGray
-import com.jamesfrench.nothingcalculator.ui.theme.DeepBlack
-import com.jamesfrench.nothingcalculator.ui.theme.DeepWhite
 import com.jamesfrench.nothingcalculator.ui.theme.NothingRed
 import com.jamesfrench.nothingcalculator.ui.theme.ndot77
 import com.jamesfrench.nothingcalculator.ui.theme.notosans
@@ -145,7 +143,7 @@ fun Calculations(viewModel: SharedViewModel) {
                     },
                     visualTransformation = DotToCommaTransformation(stringResource(R.string.decimal)),
                     cursorBrush = SolidColor(NothingRed),
-                    textStyle = TextStyle(color = DeepWhite, fontSize = 32.sp, fontFamily = notosans, textAlign = TextAlign.End),
+                    textStyle = TextStyle(color = T.colors.textPrimary, fontSize = 32.sp, fontFamily = notosans, textAlign = TextAlign.End),
                     modifier = Modifier
                         .fillMaxWidth()
                 )
@@ -154,6 +152,7 @@ fun Calculations(viewModel: SharedViewModel) {
     }
 }
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun Result(viewModel: SharedViewModel) {
     val haptic = LocalHapticFeedback.current
@@ -164,7 +163,7 @@ fun Result(viewModel: SharedViewModel) {
     val context = LocalContext.current
 
     val color by animateColorAsState(
-        targetValue = if (isPressed) ContrastedGray else DeepBlack,
+        targetValue = if (isPressed) T.colors.buttonPrimary else T.colors.background,
         animationSpec = if (isPressed)
             tween(15, easing = EaseOut)
         else
@@ -173,7 +172,7 @@ fun Result(viewModel: SharedViewModel) {
 
     Text(
         text = if (viewModel.showResult.value) viewModel.result.replace(".", stringResource(R.string.decimal)) else "",
-        color = DeepWhite,
+        color = T.colors.textPrimary,
         fontSize = textSize,
         fontFamily = ndot77,
         textAlign = TextAlign.End,

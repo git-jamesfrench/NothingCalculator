@@ -55,37 +55,37 @@ import android.os.Vibrator
 import com.jamesfrench.nothingcalculator.ui.theme.NotSoContrastedGray
 import com.jamesfrench.nothingcalculator.ui.theme.SqueezedNotSoContrastedGray
 
-data class KeysValue(val symbol: Any, val category: String, val background: Color, val font: FontFamily, val weight: Float, val numberOfPulses: Int, val value: Any = symbol)
+data class KeysValue(val symbol: Any, val category: String, val id: Int, val weight: Float, val numberOfPulses: Int, val value: Any = symbol)
 
 private val KeysValues = listOf(
     listOf(
-        KeysValue("(", "number", NothingRed, ndot77, 1f, 1, "("),
-        KeysValue("%", "suffix",NothingRed, ndot77, 1f, 1),
-        KeysValue("÷", "operator",NothingRed, ndot77, 1f, 1, "/"),
-        KeysValue("×", "operator",NothingRed, ndot77, 1f, 1, "*")
+        KeysValue("(", "number", 0, 1f, 1, "("),
+        KeysValue("%", "suffix", 0, 1f, 1),
+        KeysValue("÷", "operator", 0, 1f, 1, "/"),
+        KeysValue("×", "operator", 0, 1f, 1, "*")
     ),
     listOf(
-        KeysValue("7", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("8", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("9", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("–", "negative",NothingRed, ndot77, 1f, 1, "-")
+        KeysValue("7", "number", 1, 1f, 1),
+        KeysValue("8", "number", 1, 1f, 1),
+        KeysValue("9", "number", 1, 1f, 1),
+        KeysValue("–", "negative", 0, 1f, 1, "-")
     ),
     listOf(
-        KeysValue("4", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("5", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("6", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("+", "operator",NothingRed, ndot77, 1f, 1)
+        KeysValue("4", "number", 1, 1f, 1),
+        KeysValue("5", "number", 1, 1f, 1),
+        KeysValue("6", "number", 1, 1f, 1),
+        KeysValue("+", "operator", 0, 1f, 1)
     ),
     listOf(
-        KeysValue("1", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("2", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue("3", "number",ContrastedGray, notosans, 1f, 1),
-        KeysValue(R.string.decimal, "number",NothingRed, ndot77, 1f, 1, ".")
+        KeysValue("1", "number", 1, 1f, 1),
+        KeysValue("2", "number", 1, 1f, 1),
+        KeysValue("3", "number", 1, 1f, 1),
+        KeysValue(R.string.decimal, "number", 0, 1f, 1, ".")
     ),
     listOf(
-        KeysValue("0", "number",ContrastedGray, notosans, 2f, 1),
-        KeysValue("<", "del",DeepWhite, ndot77, 1f, 1),
-        KeysValue("=", "equal",NothingRed, ndot77, 1f, 3)
+        KeysValue("0", "number", 1, 2f, 1),
+        KeysValue("<", "del", 2, 1f, 1),
+        KeysValue("=", "equal", 0, 1f, 3)
     )
 )
 
@@ -103,7 +103,33 @@ fun squeezedColor(color: Color): Color {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, background: Color, foreground: Color, font: FontFamily, numberOfPulses: Int, modifier: Modifier = Modifier) {
+fun Key(viewModel: SharedViewModel, text: String, value: String, category: String, id: Int, numberOfPulses: Int, modifier: Modifier = Modifier) {
+    var background: Color = NothingRed
+    var squeezedBackground: Color = NothingRed
+    var foreground: Color = NothingRed
+    var font: FontFamily = notosans
+
+    when (id) {
+        0 -> {
+            background = NothingRed
+            squeezedBackground = SqueezedNothingRed
+            foreground = DeepWhite
+            font = ndot77
+        }
+        1 -> {
+            background = T.colors.buttonPrimary
+            squeezedBackground = T.colors.buttonPrimaryPressed
+            foreground = T.colors.textPrimary
+            font = notosans
+        }
+        2 -> {
+            background = T.colors.buttonSecondary
+            squeezedBackground = T.colors.buttonPrimaryPressed
+            foreground = T.colors.textPrimary
+            font = ndot77
+        }
+    }
+
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState().value
     val character = if (text == "(") {
@@ -118,7 +144,7 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, category: Strin
             tween(150, easing = EaseIn)
     )
     val color by animateColorAsState(
-        targetValue = if (isPressed) squeezedColor(background) else background,
+        targetValue = if (isPressed) squeezedBackground else background,
         animationSpec = if (isPressed)
             tween(25, easing = EaseOut)
         else
@@ -198,6 +224,7 @@ fun Key(viewModel: SharedViewModel, text: String, value: String, category: Strin
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Keys(viewModel: SharedViewModel) {
     Box(
@@ -217,6 +244,7 @@ fun Keys(viewModel: SharedViewModel) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun KeysRows(viewModel: SharedViewModel, number: Int) {
     Row(
@@ -229,9 +257,7 @@ fun KeysRows(viewModel: SharedViewModel, number: Int) {
                 key.symbol as? String ?: stringResource(key.symbol as Int),
                 key.value as String,
                 key.category,
-                key.background,
-                if (key.background == DeepWhite) DeepBlack else DeepWhite,
-                key.font,
+                key.id,
                 key.numberOfPulses,
                 modifier = Modifier
                     .weight(key.weight)

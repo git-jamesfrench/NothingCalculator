@@ -1,44 +1,70 @@
 package com.jamesfrench.nothingcalculator.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = DeepWhite,
-    secondary = DeepWhite,
-    tertiary = DeepWhite,
+@Immutable
+data class ColorScheme(
+    val buttonPrimary: Color,
+    val buttonPrimaryPressed: Color,
+    val buttonSecondary: Color,
+
+    val background: Color,
+    val buttonContainer: Color,
+
+    val textPrimary: Color,
+    val iconsPrimary: Color,
+)
+
+val LocalAppColors = staticCompositionLocalOf<ColorScheme> {
+    error("No AppColors provided")
+}
+
+val darkTheme = ColorScheme(
+    buttonPrimary = ContrastedGray,
+    buttonPrimaryPressed = SqueezedContrastedGray,
+    buttonSecondary = DeepWhite,
+
     background = DeepBlack,
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    buttonContainer = ContrastedGray,
+
+    textPrimary = DeepWhite,
+    iconsPrimary = DeepWhite,
+)
+
+val lightTheme = ColorScheme(
+    buttonPrimary = WhiteButton,
+    buttonPrimaryPressed = WhiteButtonPressed,
+    buttonSecondary = DeepWhite,
+
+    background = DeepWhite,
+    buttonContainer = ContrastedGray,
+
+    textPrimary = DeepBlack,
+    iconsPrimary = DeepBlack,
 )
 
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
-fun NothingCalculatorTheme(content: @Composable () -> Unit) {
-    val view = LocalView.current
-    val window = (view.context as Activity).window
+fun T(
+    content: @Composable () -> Unit
+) {
 
-    SideEffect {
-        val insetsController = WindowCompat.getInsetsController(window, view)
-        insetsController.isAppearanceLightStatusBars = false
+    val colorScheme: ColorScheme = if (isSystemInDarkTheme()) {
+        darkTheme
+    } else {
+        lightTheme
     }
 
-    MaterialTheme(
-        colorScheme = DarkColorScheme,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalAppColors provides colorScheme
+    ) {
+        content()
+    }
 }
