@@ -51,7 +51,7 @@ fun Settings(onSettingsClose: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(DeepBlack)
+            .background(T.colors.background)
     )
 
     Column(
@@ -60,7 +60,7 @@ fun Settings(onSettingsClose: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp, top = 15.dp),
+                .padding(start = 15.dp, end = 15.dp, top = 15.dp, bottom = 15.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             IconButton(
@@ -72,7 +72,7 @@ fun Settings(onSettingsClose: () -> Unit) {
                     modifier = Modifier.fillMaxSize()
                 )
                 Icon(
-                    painter = painterResource(R.drawable.back),
+                    painter = painterResource(R.drawable.x),
                     contentDescription = stringResource(R.string.back)
                 )
             }
@@ -87,7 +87,7 @@ fun Settings(onSettingsClose: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(15.dp),
+                .padding(start = 15.dp, end = 15.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -114,7 +114,7 @@ fun Setting(
     icon: Int,
     value: String?,
     onClick: () -> Unit,
-    openIcon: Boolean = false
+    openIcon: Boolean = false,
 ){
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState().value

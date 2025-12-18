@@ -18,6 +18,7 @@ material3 = "1.4.0"
 navigationCompose = "2.9.5"
 navigationComposeAnimated = "2.8.0"
 uiUtil = "1.9.4"
+foundation = "1.10.0"
 
 [libraries]
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
@@ -44,6 +45,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util", version.ref = "uiUtil" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

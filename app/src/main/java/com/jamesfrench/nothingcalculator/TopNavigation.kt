@@ -46,6 +46,7 @@ fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
             Icon(
                 painter = painterResource(R.drawable.history),
                 contentDescription = stringResource(R.string.history),
+                tint = T.colors.iconsPrimary
             )
         }
         Spacer(
@@ -64,7 +65,8 @@ fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
                 )
                 Icon(
                     painter = painterResource(R.drawable.ellipsis_vertical),
-                    contentDescription = stringResource(R.string.menu)
+                    contentDescription = stringResource(R.string.menu),
+                    tint = T.colors.iconsPrimary
                 )
             }
 
@@ -73,11 +75,17 @@ fun TopNavigation(onSettingsClick: () -> Unit, onHistoryClick: () -> Unit) {
                 onDismissRequest = { expanded = false },
                 offset = DpOffset(0.dp, 6.dp),
                 shape = RoundedCornerShape(19.dp),
-                containerColor = NotSoContrastedGray,
+                containerColor = T.colors.buttonContainer,
             ) {
                 DropdownMenuItem(
                     text = { Text(text = stringResource(R.string.settings), style = normalText) },
-                    leadingIcon = { Icon(painterResource(R.drawable.cog), contentDescription = stringResource(R.string.settings)) },
+                    leadingIcon = {
+                        Icon(
+                            painterResource(R.drawable.cog),
+                            contentDescription = stringResource(R.string.settings),
+                            tint = T.colors.iconsPrimary
+                        )
+                                  },
                     contentPadding = PaddingValues(start = 20.dp, end = 22.dp),
                     onClick = {
                         expanded = false

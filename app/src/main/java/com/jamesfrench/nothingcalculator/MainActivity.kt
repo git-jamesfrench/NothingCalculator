@@ -15,6 +15,7 @@ import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +29,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
-import com.jamesfrench.nothingcalculator.ui.theme.NothingCalculatorTheme
+
+// Color Theme
+import com.jamesfrench.nothingcalculator.ui.theme.LocalAppColors
+import com.jamesfrench.nothingcalculator.ui.theme.T
+import com.jamesfrench.nothingcalculator.ui.theme.ColorScheme
+object T {
+    val colors: ColorScheme
+        @Composable get() = LocalAppColors.current
+}
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
@@ -40,7 +49,7 @@ class MainActivity : ComponentActivity() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
         setContent {
-            NothingCalculatorTheme {
+            T {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     App(innerPadding)
                 }
@@ -49,6 +58,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewModel: SharedViewModel = SharedViewModel(ResourceProvider(
@@ -70,6 +80,7 @@ fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewMo
             Box(
                 modifier = modifier
                     .fillMaxSize()
+                    .background(T.colors.background)
                     .padding(innerPadding)
             ) {
                 Column(
@@ -110,6 +121,7 @@ fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewMo
             Box(
                 modifier = modifier
                     .fillMaxSize()
+                    .background(T.colors.background)
                     .padding(innerPadding)
             ) {
                 Settings(onSettingsClose = { navController.popBackStack() })
@@ -137,6 +149,7 @@ fun App(innerPadding: PaddingValues, modifier: Modifier = Modifier, sharedViewMo
             Box(
                 modifier = modifier
                     .fillMaxSize()
+                    .background(T.colors.background)
                     .padding(innerPadding)
             ) {
                 History(onHistoryClose = { navController.popBackStack() })

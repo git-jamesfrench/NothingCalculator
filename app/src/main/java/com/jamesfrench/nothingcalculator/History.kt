@@ -26,7 +26,7 @@ fun History(onHistoryClose: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(DeepBlack)
+            .background(T.colors.background)
     )
 
     Column(

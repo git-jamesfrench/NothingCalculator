@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.evalex)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.compose.foundation)
     annotationProcessor(libs.lombok)
     compileOnly(libs.lombok)
     testImplementation(libs.junit)
