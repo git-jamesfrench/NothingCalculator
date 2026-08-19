@@ -1,6 +1,6 @@
 ![Nothing Calculator](https://assets.jamesfrench.fr/nothing-calculator/header.png)
 
-A calculator designed with the Nothing branding.
+A calculator designed with Nothing's aesthetics.
 
 This app is not at all affiliated with [Nothing](https://nothing.tech), for any reclamations, please contact me at: **[contact@jamesfrench.fr](mailto:contact@jamesfrench.fr)**.
 
